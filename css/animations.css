@@ -118,6 +118,39 @@
   to   { transform: translateX(-50%); }
 }
 
+
+@media (max-width:768px){
+
+  .fc1,
+  .fc2,
+  .fc3,
+  .orb1,
+  .orb2,
+  .orb3{
+    animation:none !important;
+  }
+
+  .testimonials-track{
+    animation:none !important;
+  }
+
+}
+@media (max-width:768px){
+
+  .hero{
+    min-height:auto !important;
+    padding:80px 12px 20px !important;
+  }
+
+  .hero-content{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:24px 18px;
+  }
+
+}
+
 /* ── PAGE LOAD ANIMATIONS (faster: 0.45s, shorter delays) ── */
 .page-loaded .hero-content > * { animation: fadeUp 0.45s ease both; }
 .page-loaded .hero-content > *:nth-child(1) { animation-delay: 0.05s; }

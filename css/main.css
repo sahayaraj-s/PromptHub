@@ -658,6 +658,77 @@ ul { list-style: none; }
   animation: bounce 2s infinite;
 }
 
+/* MOBILE HERO FIX - FLIPKART STYLE */
+
+@media (max-width: 768px) {
+
+  .hero{
+    min-height:auto !important;
+    height:auto !important;
+    padding:85px 16px 30px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center;
+    overflow:hidden;
+  }
+
+  .hero-content{
+    width:100%;
+    z-index:2;
+  }
+
+  .hero-title{
+    font-size:2.2rem !important;
+    line-height:1.15 !important;
+    margin-bottom:14px !important;
+  }
+
+  .hero-subtitle{
+    font-size:0.95rem !important;
+    line-height:1.6 !important;
+    margin-bottom:20px !important;
+  }
+
+  .hero-search{
+    margin-bottom:20px !important;
+  }
+
+  .search-wrapper{
+    width:100%;
+    max-width:100%;
+  }
+
+  .hero-cta{
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:25px !important;
+  }
+
+  .hero-cta .btn{
+    width:100%;
+    justify-content:center;
+  }
+
+  .hero-stats{
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .hero-scroll-hint{
+    display:none !important;
+  }
+
+  .hero-visual{
+    display:none !important;
+  }
+
+  /* Reduce background effects */
+  .hero-orb{
+    filter:blur(60px);
+    opacity:.15;
+  }
+}
+
 /* ================================================
    SECTIONS
 ================================================ */
