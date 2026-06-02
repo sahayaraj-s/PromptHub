@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Manage Posts – Admin PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo"><span class="logo-icon-text"><img src="/logo.png" alt="logo"></span><div style="font-size:0.72rem;color:var(--text-dim)">Admin Panel</div></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><i class="fa fa-chart-line"></i> Dashboard</a>
+      <a href="upload.html" class="sidebar-link"><i class="fa fa-upload"></i> Upload Prompt</a>
+      <a href="posts.html" class="sidebar-link active"><i class="fa fa-th-large"></i> Manage Posts</a>
+      <a href="categories.html" class="sidebar-link"><i class="fa fa-folder"></i> Categories</a>
+      <a href="messages.html" class="sidebar-link"><i class="fa fa-envelope"></i> Messages</a>
+      <a href="analytics.html" class="sidebar-link"><i class="fa fa-bar-chart"></i> Analytics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../index.html" target="_blank" class="sidebar-link"><i class="fa fa-globe"></i> View Site</a>
+      <button class="sidebar-link" onclick="adminSignOut()" style="width:100%;text-align:left"><i class="fa fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </aside>
+  <div class="admin-main">
+    <header class="admin-header">
+      <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+      <h1 class="admin-page-title">Manage Posts</h1>
+      <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+        <a href="upload.html" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> New Prompt</a>
+        <img id="adminAvatar" class="user-avatar" src="" alt="Admin" style="width:34px;height:34px"/>
+        <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      </div>
+    </header>
+    <div class="admin-content">
+
+      <!-- CONTROLS -->
+      <div class="admin-section" style="padding:14px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <div style="position:relative;flex:1;min-width:180px">
+            <i class="fa fa-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:0.82rem"></i>
+            <input type="text" id="searchPosts" class="form-control" style="padding-left:32px" placeholder="Search posts..." oninput="applyFilters()"/>
+          </div>
+          <select class="filter-btn" id="filterTool" onchange="applyFilters()" style="cursor:pointer">
+            <option value="">All Tools</option>
+            <option>Midjourney</option><option>ChatGPT</option><option>Kling AI</option>
+            <option>Runway ML</option><option>Gemini</option><option>Leonardo AI</option>
+            <option>DALL·E 3</option><option>Stable Diffusion</option><option>Sora</option>
+          </select>
+          <select class="filter-btn" id="filterType" onchange="applyFilters()" style="cursor:pointer">
+            <option value="">All Types</option>
+            <option value="image">Images</option><option value="video">Videos</option><option value="text">Text</option>
+          </select>
+          <select class="filter-btn" id="filterStatus" onchange="applyFilters()" style="cursor:pointer">
+            <option value="">All Status</option>
+            <option value="published">Published</option><option value="hidden">Hidden</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" onclick="loadPosts()"><i class="fa fa-refresh"></i></button>
+        </div>
+      </div>
+
+      <!-- BULK BAR -->
+      <div id="bulkBar" style="display:none" class="admin-section" style="padding:12px 16px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span id="selectedCount" style="font-size:0.875rem;color:var(--text-muted)">0 selected</span>
+          <button class="btn btn-sm btn-outline" onclick="bulkAction('feature')">⭐ Feature</button>
+          <button class="btn btn-sm btn-outline" onclick="bulkAction('hide')">🚫 Hide</button>
+          <button class="btn btn-sm btn-outline" onclick="bulkAction('publish')">✅ Publish</button>
+          <button class="btn btn-sm" style="color:#EF4444;border:1px solid rgba(239,68,68,0.3);background:transparent;border-radius:50px;padding:6px 14px;cursor:pointer;font-size:0.8rem" onclick="bulkAction('delete')">🗑 Delete</button>
+          <button class="btn btn-ghost btn-sm" onclick="clearSelection()">Cancel</button>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="admin-section" style="padding:0">
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"/></th>
+                <th>Thumb</th><th>Title</th><th>Tool</th><th>Type</th>
+                <th>Likes</th><th>Views</th><th>Copies</th>
+                <th>Status</th><th>Date</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="postsBody">
+              <tr><td colspan="11" style="text-align:center;padding:32px"><div class="loading-spinner" style="margin:0 auto"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-top:1px solid var(--card-border)">
+          <span id="paginationInfo" style="font-size:0.82rem;color:var(--text-muted)">–</span>
+          <div style="display:flex;gap:6px" id="paginationBtns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal" style="max-width:540px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <h3 style="font-family:var(--font-heading);font-weight:700">Quick Edit</h3>
+      <button class="btn-icon" onclick="closeModal()"><i class="fa fa-times"></i></button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:13px">
+      <div class="form-group"><label class="form-label">Title</label><input type="text" id="editTitle" class="form-control"/></div>
+      <div class="form-group"><label class="form-label">Description</label><textarea id="editDesc" class="form-control" rows="3"></textarea></div>
+      <div style="display:flex;gap:12px">
+        <div class="form-group" style="flex:1"><label class="form-label">Tool</label>
+          <select id="editTool" class="form-control"><option>Midjourney</option><option>ChatGPT</option><option>Kling AI</option><option>Runway ML</option><option>Gemini</option><option>Leonardo AI</option><option>DALL·E 3</option><option>Stable Diffusion</option><option>Sora</option></select>
+        </div>
+        <div class="form-group" style="flex:1"><label class="form-label">Category</label>
+          <select id="editCat" class="form-control"><option value="ai-images">AI Images</option><option value="ai-videos">AI Videos</option><option value="midjourney">Midjourney</option><option value="kling-ai">Kling AI</option><option value="chatgpt">ChatGPT</option><option value="cinematic">Cinematic</option><option value="viral-content">Viral Content</option></select>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:0.875rem"><input type="checkbox" id="editFeatured"/> Featured ⭐</label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:0.875rem"><input type="checkbox" id="editPinned"/> Pinned 📌</label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:0.875rem"><input type="checkbox" id="editPublished"/> Published ✅</label>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="saveEdit()"><i class="fa fa-save"></i> Save Changes</button>
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script>
+initThemeToggle();
+let allPosts=[], filteredPosts=[], selectedIds=new Set(), currentEditId=null, currentPage=1;
+const PAGE_SIZE=20;
+
+initAdminAuth(()=>loadPosts());
+
+async function loadPosts(){
+  document.getElementById('postsBody').innerHTML='<tr><td colspan="11" style="text-align:center;padding:32px"><div class="loading-spinner" style="margin:0 auto"></div></td></tr>';
+  try{
+    const snap=await db.collection('prompts').orderBy('createdAt','desc').limit(300).get();
+    allPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
+    applyFilters();
+  }catch(e){showToast('Error: '+e.message,'error');}
+}
+
+function applyFilters(){
+  const search=(document.getElementById('searchPosts').value||'').toLowerCase();
+  const tool=document.getElementById('filterTool').value;
+  const type=document.getElementById('filterType').value;
+  const status=document.getElementById('filterStatus').value;
+  filteredPosts=allPosts.filter(p=>{
+    if(search&&!(p.title||'').toLowerCase().includes(search)&&!(p.description||'').toLowerCase().includes(search)) return false;
+    if(tool&&p.tool!==tool) return false;
+    if(type&&p.type!==type) return false;
+    if(status==='published'&&p.published===false) return false;
+    if(status==='hidden'&&p.published!==false) return false;
+    return true;
+  });
+  currentPage=1; renderTable();
+}
+
+function renderTable(){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const page=filteredPosts.slice(start,start+PAGE_SIZE);
+  const tbody=document.getElementById('postsBody');
+  if(!page.length){tbody.innerHTML='<tr><td colspan="11" style="text-align:center;padding:40px;color:var(--text-muted)">No posts found</td></tr>';document.getElementById('paginationInfo').textContent='0 posts';document.getElementById('paginationBtns').innerHTML='';return;}
+  tbody.innerHTML=page.map(p=>{
+    const thumb=p.thumbnailUrl||p.imageUrl||'';
+    const live=p.published!==false;
+    return `<tr data-id="${p.id}">
+      <td><input type="checkbox" class="row-check" data-id="${p.id}" onchange="toggleSelect('${p.id}',this)"/></td>
+      <td>${thumb?`<img src="${thumb}" style="width:48px;height:34px;object-fit:cover;border-radius:5px;display:block"/>`:`<div style="width:48px;height:34px;background:var(--bg-3);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1.1rem">${getToolEmoji(p.tool)}</div>`}</td>
+      <td style="max-width:200px"><div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)">${sanitize(p.title||'Untitled')}</div><div style="font-size:0.7rem;color:var(--text-dim);margin-top:1px">${sanitize(p.slug||'')}</div></td>
+      <td><span class="table-badge">${sanitize(p.tool||'')}</span></td>
+      <td><span style="font-size:0.75rem">${p.type==='video'?'🎬':'🖼️'} ${p.type||'image'}</span></td>
+      <td style="color:var(--text-muted)"><i class="fa fa-heart" style="color:#FF4ECD;font-size:0.7rem"></i> ${formatNumber(p.likes||0)}</td>
+      <td style="color:var(--text-muted)"><i class="fa fa-eye" style="font-size:0.7rem"></i> ${formatNumber(p.views||0)}</td>
+      <td style="color:var(--text-muted)"><i class="fa fa-copy" style="font-size:0.7rem"></i> ${formatNumber(p.copies||0)}</td>
+      <td>
+        <span style="font-size:0.7rem;padding:2px 8px;border-radius:50px;background:${live?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)'};color:${live?'#10B981':'#EF4444'}">${live?'✅ Live':'🚫 Hidden'}</span>
+        ${p.featured?'<span style="font-size:0.7rem;margin-left:3px">⭐</span>':''}
+        ${p.pinned?'<span style="font-size:0.7rem;margin-left:2px">📌</span>':''}
+      </td>
+      <td style="color:var(--text-dim);font-size:0.76rem;white-space:nowrap">${formatDate(p.createdAt)}</td>
+      <td>
+        <div style="display:flex;gap:3px">
+          <a href="../pages/prompt.html?id=${p.id}" target="_blank" class="btn-icon btn-sm-icon" title="View"><i class="fa fa-eye"></i></a>
+          <a href="upload.html?edit=${p.id}" class="btn-icon btn-sm-icon" title="Edit"><i class="fa fa-edit"></i></a>
+          <button class="btn-icon btn-sm-icon" title="${live?'Hide':'Publish'}" onclick="togglePublish('${p.id}',${live})"><i class="fa fa-${live?'eye-slash':'check'}"></i></button>
+          <button class="btn-icon btn-sm-icon" title="${p.featured?'Unfeature':'Feature'}" onclick="toggleFeatured('${p.id}',${!!p.featured})" style="${p.featured?'color:#F59E0B':''}"><i class="fa fa-star"></i></button>
+          <button class="btn-icon btn-sm-icon" title="Quick Edit" onclick="openEdit('${p.id}')"><i class="fa fa-pencil"></i></button>
+          <button class="btn-icon btn-sm-icon danger" title="Delete" onclick="deletePost('${p.id}')"><i class="fa fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  const total=filteredPosts.length, totalPages=Math.ceil(total/PAGE_SIZE);
+  document.getElementById('paginationInfo').textContent=`Showing ${start+1}–${Math.min(start+PAGE_SIZE,total)} of ${total} posts`;
+  const pb=document.getElementById('paginationBtns'); pb.innerHTML='';
+  if(totalPages>1){
+    if(currentPage>1) pb.innerHTML+=`<button class="page-btn" onclick="gotoPage(${currentPage-1})"><i class="fa fa-chevron-left"></i></button>`;
+    for(let i=Math.max(1,currentPage-2);i<=Math.min(totalPages,currentPage+2);i++) pb.innerHTML+=`<button class="page-btn ${i===currentPage?'active':''}" onclick="gotoPage(${i})">${i}</button>`;
+    if(currentPage<totalPages) pb.innerHTML+=`<button class="page-btn" onclick="gotoPage(${currentPage+1})"><i class="fa fa-chevron-right"></i></button>`;
+  }
+}
+
+function gotoPage(n){currentPage=n;renderTable();window.scrollTo(0,0);}
+
+function toggleSelect(id,cb){if(cb.checked)selectedIds.add(id);else selectedIds.delete(id);updateBulkBar();}
+function toggleSelectAll(cb){document.querySelectorAll('.row-check').forEach(c=>{c.checked=cb.checked;if(cb.checked)selectedIds.add(c.dataset.id);else selectedIds.delete(c.dataset.id);});updateBulkBar();}
+function updateBulkBar(){const bar=document.getElementById('bulkBar');bar.style.display=selectedIds.size>0?'block':'none';document.getElementById('selectedCount').textContent=`${selectedIds.size} selected`;}
+function clearSelection(){selectedIds.clear();document.querySelectorAll('.row-check').forEach(c=>c.checked=false);document.getElementById('selectAll').checked=false;updateBulkBar();}
+
+async function bulkAction(action){
+  if(!selectedIds.size)return;
+  if(action==='delete'&&!confirm(`Delete ${selectedIds.size} prompts? This cannot be undone.`))return;
+  const ids=[...selectedIds];
+  try{
+    await Promise.all(ids.map(id=>{
+      if(action==='delete') return DB.deletePrompt(id);
+      if(action==='feature') return DB.updatePrompt(id,{featured:true});
+      if(action==='hide') return DB.updatePrompt(id,{published:false});
+      if(action==='publish') return DB.updatePrompt(id,{published:true});
+    }));
+    showToast(`${action} applied to ${ids.length} posts`,'success');
+    clearSelection();loadPosts();
+  }catch(e){showToast('Error: '+e.message,'error');}
+}
+
+async function deletePost(id){
+  if(!confirm('Delete this prompt? Cannot be undone.'))return;
+  try{await DB.deletePrompt(id);allPosts=allPosts.filter(p=>p.id!==id);applyFilters();showToast('Deleted','success');}
+  catch(e){showToast('Error: '+e.message,'error');}
+}
+
+async function togglePublish(id,current){
+  try{await DB.updatePrompt(id,{published:!current});const p=allPosts.find(p=>p.id===id);if(p)p.published=!current;applyFilters();showToast(current?'Post hidden':'Post published','success');}
+  catch(e){showToast('Error: '+e.message,'error');}
+}
+
+async function toggleFeatured(id,current){
+  try{await DB.updatePrompt(id,{featured:!current});const p=allPosts.find(p=>p.id===id);if(p)p.featured=!current;applyFilters();showToast(current?'Unfeatured':'Featured! ⭐','success');}
+  catch(e){showToast('Error: '+e.message,'error');}
+}
+
+function openEdit(id){
+  const p=allPosts.find(p=>p.id===id);if(!p)return;
+  currentEditId=id;
+  document.getElementById('editTitle').value=p.title||'';
+  document.getElementById('editDesc').value=p.description||'';
+  document.getElementById('editTool').value=p.tool||'';
+  document.getElementById('editCat').value=p.category||'';
+  document.getElementById('editFeatured').checked=p.featured||false;
+  document.getElementById('editPinned').checked=p.pinned||false;
+  document.getElementById('editPublished').checked=p.published!==false;
+  document.getElementById('editModal').classList.add('open');
+}
+
+async function saveEdit(){
+  if(!currentEditId)return;
+  const data={title:document.getElementById('editTitle').value.trim(),description:document.getElementById('editDesc').value.trim(),tool:document.getElementById('editTool').value,category:document.getElementById('editCat').value,featured:document.getElementById('editFeatured').checked,pinned:document.getElementById('editPinned').checked,published:document.getElementById('editPublished').checked};
+  try{
+    await DB.updatePrompt(currentEditId,data);
+    const idx=allPosts.findIndex(p=>p.id===currentEditId);
+    if(idx!==-1) allPosts[idx]={...allPosts[idx],...data};
+    applyFilters();closeModal();showToast('Updated! ✅','success');
+  }catch(e){showToast('Error: '+e.message,'error');}
+}
+
+function closeModal(){document.getElementById('editModal').classList.remove('open');currentEditId=null;}
+document.getElementById('editModal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+function toggleSidebar(){document.getElementById('adminSidebar').classList.toggle('open');}
+</script>
+</body>
+</html>

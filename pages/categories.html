@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Categories – PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+  <style>
+    .cat-big-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-lg);padding:28px 20px;text-align:center;cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;}
+    .cat-big-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(124,58,237,0.2);}
+    .cat-big-card:hover .cat-big-icon{transform:scale(1.15);}
+    .cat-big-icon{font-size:2.6rem;margin-bottom:14px;display:block;transition:transform 0.3s ease;}
+    .cat-big-thumbnail{width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:14px;display:block;}
+    .cat-big-name{font-family:var(--font-heading);font-size:0.98rem;font-weight:700;margin-bottom:5px;}
+    .cat-big-desc{font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;line-height:1.5;}
+    .cat-big-count{display:inline-block;font-size:0.73rem;padding:3px 12px;border-radius:50px;background:rgba(124,58,237,0.1);color:var(--primary-light);border:1px solid rgba(124,58,237,0.2);}
+    .cat-inactive{opacity:0.45;pointer-events:none;}
+    .big-cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
+    @media(min-width:1024px){.big-cat-grid{grid-template-columns:repeat(4,1fr);}}
+    @media(max-width:480px){.big-cat-grid{grid-template-columns:repeat(2,1fr);gap:12px;}}
+    .cat-thumb{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:12px;
+    display:block;
+    margin:0 auto 12px;
+}
+  </style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span class="logo-icon-text" style="display:none">⚡ PromptHub</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="feed.html" class="nav-link">Explore</a>
+      <a href="categories.html" class="nav-link active">Categories</a>
+      <a href="videos.html" class="nav-link">Videos</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      <a href="search.html" class="btn-icon"><i class="fa fa-search"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main style="padding-top:calc(var(--nav-height)+40px);padding-bottom:80px">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up" data-aos-duration="500">
+      <div class="section-tag">📁 Browse</div>
+      <h1 class="page-title">All Categories</h1>
+      <p class="page-sub">Find prompts organised by AI tool and content type</p>
+    </div>
+    <div class="big-cat-grid" id="categoriesGrid">
+      <!-- skeleton -->
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+      <div class="skeleton-card" style="height:180px"></div>
+    </div>
+  </div>
+</main>
+
+<nav class="mobile-nav">
+  <a href="../index.html" class="mobile-nav-item"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="feed.html" class="mobile-nav-item"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="search.html" class="mobile-nav-item"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="videos.html" class="mobile-nav-item"><i class="fa fa-play-circle"></i><span>Videos</span></a>
+  <a href="contact.html" class="mobile-nav-item"><i class="fa fa-envelope"></i><span>Contact</span></a>
+</nav>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="nav-logo" style="margin-bottom:12px;display:inline-flex">
+          <img src="../logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none'" style="height:36px"/>
+        </a>
+        <p>The premium destination for AI prompt creators worldwide.</p>
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <a href="feed.html">All Prompts</a>
+        <a href="categories.html">Categories</a>
+        <a href="videos.html">AI Videos</a>
+        <a href="search.html">Search</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-links">
+        <h4>AI Tools</h4>
+        <a href="feed.html?category=midjourney">Midjourney</a>
+        <a href="feed.html?category=kling-ai">Kling AI</a>
+        <a href="feed.html?category=chatgpt">ChatGPT</a>
+        <a href="feed.html?category=runway-ai">Runway ML</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 PromptHub. All rights reserved. &nbsp;|&nbsp; Developed by <strong>Alvortix Tech Services</strong></p>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+AOS.init({duration:500,once:true,offset:40}); initNavbarScroll(); initHamburger(); initThemeToggle();
+
+async function loadCats(){
+  const g=document.getElementById('categoriesGrid');
+  try {
+    const cats = await loadDynamicCategories();
+    g.innerHTML = cats.map((c,i)=>{
+      const icon = c.icon||getCatEmoji(c.slug||c.id);
+      const slug = c.slug||c.id;
+      const isInactive = c.status==='inactive';
+      return `
+        <div class="cat-big-card ${isInactive?'cat-inactive':''}" onclick="${isInactive?'':` "gotoCategory('${slug}')" `}" data-aos="zoom-in" data-aos-delay="${(i%4)*40}" data-aos-duration="400" ${!isInactive?`onclick="gotoCategory('${slug}')"`:''}>
+          ${c.thumbnail?`<img src="${c.thumbnail}" alt="${sanitize(c.name)}" class="cat-square-thumb" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>`:''}
+          <span class="cat-big-icon" ${c.thumbnail?'style="display:none"':''}>${icon}</span>
+          <div class="cat-big-name">${sanitize(c.name)}</div>
+          <div class="cat-big-desc">${sanitize(c.description||'')}</div>
+          <span class="cat-big-count" data-category="${slug}">${isInactive?'Coming Soon':'Explore'}</span>
+        </div>`;
+    }).join('');
+    // Fix onclick for active cards
+    g.querySelectorAll('.cat-big-card:not(.cat-inactive)').forEach(card=>{
+      const countEl = card.querySelector('.cat-big-count');
+      const slug = countEl?.dataset.category;
+      if(slug) {
+        card.onclick = ()=>gotoCategory(slug);
+        // Load counts
+        DB.getCategoryCount(slug).then(n=>{if(countEl)countEl.textContent=n>0?`${formatNumber(n)} prompts`:'Explore';}).catch(()=>{});
+      }
+    });
+  } catch(e) {
+    g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📁</div><h3>Could not load categories</h3><p>'+e.message+'</p></div>';
+  }
+}
+loadCats();
+</script>
+</body>
+</html>

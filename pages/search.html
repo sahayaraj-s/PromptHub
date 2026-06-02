@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Search – PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span class="logo-icon-text" style="display:none">⚡ PromptHub</span>
+    </a>
+    <div class="nav-actions" style="margin-left:auto">
+      <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div style="padding:calc(var(--nav-height)+40px) 0 20px;text-align:center;background:var(--bg-2)">
+  <div class="container">
+    <div class="section-tag" style="margin-bottom:14px">🔍 Search</div>
+    <h1 style="font-family:var(--font-heading);font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;margin-bottom:20px">Find Your Perfect Prompt</h1>
+    <div style="max-width:640px;margin:0 auto 16px;display:flex;align-items:center;background:var(--card-bg);border:1px solid var(--card-border);border-radius:50px;padding:6px 6px 6px 20px;gap:12px;transition:var(--transition)" id="mainSearchBar">
+      <i class="fa fa-search" style="color:var(--text-dim)"></i>
+      <input type="text" id="mainSearch" style="flex:1;background:none;border:none;outline:none;color:var(--text);font-size:1rem;font-family:var(--font-body)" placeholder="Search prompts, AI tools, styles..." autofocus/>
+      <button class="search-btn" onclick="doSearch()">Search</button>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+      <span style="font-size:0.78rem;color:var(--text-dim)">Try:</span>
+      <span class="tag" onclick="quickSet('cinematic portrait')" style="cursor:pointer">cinematic portrait</span>
+      <span class="tag" onclick="quickSet('anime style')" style="cursor:pointer">anime style</span>
+      <span class="tag" onclick="quickSet('neon city')" style="cursor:pointer">neon city</span>
+      <span class="tag" onclick="quickSet('viral video')" style="cursor:pointer">viral video</span>
+      <span class="tag" onclick="quickSet('midjourney')" style="cursor:pointer">midjourney</span>
+      <span class="tag" onclick="quickSet('kling ai')" style="cursor:pointer">kling ai</span>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding-top:28px;padding-bottom:80px">
+  <!-- TYPE FILTERS -->
+  <div class="filters-bar" style="margin-bottom:24px">
+    <button class="filter-btn active" onclick="setType('',this)">All</button>
+    <button class="filter-btn" onclick="setType('image',this)">🖼️ Images</button>
+    <button class="filter-btn" onclick="setType('video',this)">🎬 Videos</button>
+    <button class="filter-btn" onclick="setType('text',this)">💬 Text</button>
+    <select class="filter-btn" id="catFilter" onchange="setCategory(this.value)" style="cursor:pointer">
+      <option value="">📁 All Categories</option>
+    </select>
+  </div>
+
+  <div id="resultsInfo" style="color:var(--text-muted);font-size:0.875rem;margin-bottom:20px">Enter a search term to find prompts</div>
+
+  <div class="prompt-grid" id="resultsGrid"></div>
+  <div id="emptySearch" style="display:none">
+    <div class="empty-state">
+      <div class="empty-icon">🔍</div>
+      <h3>No results found</h3>
+      <p>Try different keywords or browse our categories</p>
+      <a href="categories.html" class="btn btn-primary">Browse Categories</a>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav">
+  <a href="../index.html" class="mobile-nav-item"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="feed.html" class="mobile-nav-item"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="search.html" class="mobile-nav-item active"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="videos.html" class="mobile-nav-item"><i class="fa fa-play-circle"></i><span>Videos</span></a>
+  <a href="contact.html" class="mobile-nav-item"><i class="fa fa-envelope"></i><span>Contact</span></a>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+initNavbarScroll(); initThemeToggle();
+let currentType='';
+const urlQ=getParam('q');
+if(urlQ){document.getElementById('mainSearch').value=urlQ;doSearch();}
+
+document.getElementById('mainSearch').addEventListener('input',debounce(doSearch,400));
+document.getElementById('mainSearch').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+
+function quickSet(t){document.getElementById('mainSearch').value=t;doSearch();}
+
+function setCategory(cat){ currentCategory=cat; doSearch(); }
+function setType(t,btn){
+  currentType=t;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  doSearch();
+}
+
+async function doSearch(){
+  const term=document.getElementById('mainSearch').value.trim();
+  const grid=document.getElementById('resultsGrid');
+  const info=document.getElementById('resultsInfo');
+  const empty=document.getElementById('emptySearch');
+  if(!term){grid.innerHTML='';info.textContent='Enter a search term to find prompts';empty.style.display='none';return;}
+  grid.innerHTML=Array(3).fill('<div class="skeleton-card"></div>').join('');
+  info.textContent=`Searching for "${term}"...`;
+  empty.style.display='none';
+  try {
+    let results=await DB.searchPrompts(term);
+    if(currentType) results=results.filter(p=>p.type===currentType);
+    if(currentCategory) results=results.filter(p=>p.category===currentCategory);
+    grid.innerHTML='';
+    if(!results.length){empty.style.display='block';info.textContent=`No results for "${term}"`;return;}
+    info.textContent=`${results.length} result${results.length!==1?'s':''} for "${term}"`;
+    results.forEach((p,i)=>{const d=document.createElement('div');d.innerHTML=buildPromptCard(p,i);grid.appendChild(d.firstElementChild);});
+  } catch(e){grid.innerHTML='';info.textContent='Search error: '+e.message;}
+}
+</script>
+</body>
+</html>

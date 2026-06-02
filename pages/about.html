@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>About Us – PromptHub</title>
+  <meta name="description" content="Learn about PromptHub – the premium AI prompt sharing platform built for creators."/>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span class="logo-icon-text" style="display:none">⚡ PromptHub</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="feed.html" class="nav-link">Explore</a>
+      <a href="categories.html" class="nav-link">Categories</a>
+      <a href="videos.html" class="nav-link">Videos</a>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      <a href="search.html" class="btn-icon"><i class="fa fa-search"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ABOUT HERO -->
+<section class="about-hero" style="background:var(--bg-2)">
+  <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+    <div style="position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(124,58,237,0.12);filter:blur(80px);top:-150px;left:-100px"></div>
+    <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(255,78,205,0.08);filter:blur:80px;bottom:-100px;right:-80px"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="container" style="position:relative">
+    <div class="section-tag" data-aos="fade-down">✨ Our Story</div>
+    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100" style="font-size:clamp(2rem,4vw,3.2rem)">
+      Built for the <span class="gradient-text">AI Creator</span> Generation
+    </h1>
+    <p style="color:var(--text-muted);font-size:1.05rem;line-height:1.8;max-width:620px;margin:0 auto 40px" data-aos="fade-up" data-aos-delay="150">
+      PromptHub was born from a simple idea: every creator deserves access to the best AI prompts. We curate, organise and share premium prompts so you can focus on creating, not experimenting.
+    </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap" data-aos="fade-up" data-aos-delay="200">
+      <a href="feed.html" class="btn btn-primary btn-lg magnetic-btn"><i class="fa fa-compass"></i> Explore Prompts</a>
+      <a href="contact.html" class="btn btn-outline btn-lg"><i class="fa fa-envelope"></i> Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section" style="padding:60px 0">
+  <div class="container">
+    <div class="about-stat-grid">
+      <div class="about-stat-card" data-aos="zoom-in" data-aos-delay="0">
+        <div class="about-stat-num" data-count="10000">0</div>
+        <div class="about-stat-label">AI Prompts</div>
+      </div>
+      <div class="about-stat-card" data-aos="zoom-in" data-aos-delay="60">
+        <div class="about-stat-num" data-count="50000">0</div>
+        <div class="about-stat-label">Happy Creators</div>
+      </div>
+      <div class="about-stat-card" data-aos="zoom-in" data-aos-delay="120">
+        <div class="about-stat-num" data-count="20">0</div>
+        <div class="about-stat-label">AI Tools Covered</div>
+      </div>
+      <div class="about-stat-card" data-aos="zoom-in" data-aos-delay="180">
+        <div class="about-stat-num" data-count="500000">0</div>
+        <div class="about-stat-label">Prompts Copied</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="section" style="padding:60px 0;background:var(--bg-2)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr;gap:48px;align-items:center" class="about-mission-grid">
+      <div data-aos="fade-right">
+        <div class="section-tag" style="text-align:left">🎯 Our Mission</div>
+        <h2 style="font-family:var(--font-heading);font-size:clamp(1.6rem,3vw,2.4rem);font-weight:800;line-height:1.2;margin:14px 0 18px">Democratising AI Creativity for Everyone</h2>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:16px">
+          We believe the gap between imagination and creation should be zero. With the right prompt, anyone can generate breathtaking AI art, viral videos, and powerful content — regardless of technical skill.
+        </p>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:24px">
+          PromptHub is our answer: a beautifully curated, constantly updated library of prompts for Midjourney, Kling AI, ChatGPT, Runway ML and 20+ tools — all free, all copy-ready.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--text-muted)">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,0.15);color:#10B981;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0"><i class="fa fa-check"></i></span>
+            Daily updated prompts from trending AI tools
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--text-muted)">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,0.15);color:#10B981;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0"><i class="fa fa-check"></i></span>
+            One-click copy — no friction, no sign-up required
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--text-muted)">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,0.15);color:#10B981;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0"><i class="fa fa-check"></i></span>
+            Organised by tool, category and content type
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.9rem;color:var(--text-muted)">
+            <span style="width:28px;height:28px;border-radius:50%;background:rgba(16,185,129,0.15);color:#10B981;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0"><i class="fa fa-check"></i></span>
+            Images, videos and text prompts in one place
+          </div>
+        </div>
+      </div>
+      <div data-aos="fade-left">
+        <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-lg);padding:36px;display:flex;flex-direction:column;gap:20px">
+          <div style="font-size:2rem">⚡</div>
+          <h3 style="font-family:var(--font-heading);font-size:1.3rem;font-weight:700">Why PromptHub?</h3>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;gap:14px">
+              <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🎨</div>
+              <div><div style="font-weight:600;font-size:0.9rem;margin-bottom:3px">Premium Quality</div><div style="font-size:0.82rem;color:var(--text-muted)">Every prompt is tested and refined for maximum output quality.</div></div>
+            </div>
+            <div style="display:flex;gap:14px">
+              <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🔄</div>
+              <div><div style="font-weight:600;font-size:0.9rem;margin-bottom:3px">Always Fresh</div><div style="font-size:0.82rem;color:var(--text-muted)">New prompts added daily, keeping pace with the latest AI releases.</div></div>
+            </div>
+            <div style="display:flex;gap:14px">
+              <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:rgba(255,78,205,0.12);border:1px solid rgba(255,78,205,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">📱</div>
+              <div><div style="font-weight:600;font-size:0.9rem;margin-bottom:3px">Mobile First</div><div style="font-size:0.82rem;color:var(--text-muted)">Fully optimised for mobile — copy prompts on the go, anytime.</div></div>
+            </div>
+            <div style="display:flex;gap:14px">
+              <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">🆓</div>
+              <div><div style="font-weight:600;font-size:0.9rem;margin-bottom:3px">100% Free</div><div style="font-size:0.82rem;color:var(--text-muted)">No paywalls, no sign-ups required. Just copy and create.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="section" style="padding:60px 0">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">💫 Our Values</div>
+      <h2 class="section-title">What We Stand For</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px">
+      <div class="team-card" data-aos="fade-up" data-aos-delay="0">
+        <span class="team-emoji">🌍</span>
+        <div class="team-name">Accessibility</div>
+        <div class="team-role">AI tools for everyone, everywhere, always free</div>
+      </div>
+      <div class="team-card" data-aos="fade-up" data-aos-delay="60">
+        <span class="team-emoji">🏆</span>
+        <div class="team-name">Quality</div>
+        <div class="team-role">Only the best, hand-picked prompts make it here</div>
+      </div>
+      <div class="team-card" data-aos="fade-up" data-aos-delay="120">
+        <span class="team-emoji">🚀</span>
+        <div class="team-name">Innovation</div>
+        <div class="team-role">Always exploring new AI tools and techniques</div>
+      </div>
+      <div class="team-card" data-aos="fade-up" data-aos-delay="180">
+        <span class="team-emoji">🤝</span>
+        <div class="team-name">Community</div>
+        <div class="team-role">Built by creators, for creators, with love</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILT BY -->
+<section class="section" style="padding:60px 0;background:var(--bg-2)">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">🏢 Built By</div>
+      <h2 class="section-title">Alvortix Tech Services</h2>
+      <p class="section-sub">Premium web development, design and digital solutions</p>
+    </div>
+    <div style="max-width:680px;margin:0 auto" data-aos="zoom-in">
+      <div style="background:rgba(124,58,237,0.06);border:1px solid rgba(124,58,237,0.2);border-radius:var(--radius-lg);padding:40px;text-align:center">
+        <div style="font-size:3.5rem;margin-bottom:20px">🏗️</div>
+        <h3 style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;margin-bottom:12px">Alvortix Tech Services</h3>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:24px;font-size:0.95rem">
+          We craft premium digital experiences — from AI-powered platforms to e-commerce stores and SaaS products. PromptHub is one of our flagship projects, built with passion and cutting-edge technology.
+        </p>
+        <div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:24px">
+          <span class="tag">Web Development</span>
+          <span class="tag">UI/UX Design</span>
+          <span class="tag">Firebase & Cloud</span>
+          <span class="tag">AI Integration</span>
+          <span class="tag">Mobile Apps</span>
+        </div>
+        <a href="contact.html" class="btn btn-primary"><i class="fa fa-envelope"></i> Work With Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section cta-section" style="padding:60px 0">
+  <div class="container">
+    <div class="cta-card" data-aos="zoom-in">
+      <div class="cta-bg-orb"></div>
+      <h2>Start Creating with AI Today</h2>
+      <p>Thousands of premium prompts, zero cost. What are you waiting for?</p>
+      <div class="cta-buttons">
+        <a href="feed.html" class="btn btn-primary btn-lg magnetic-btn"><i class="fa fa-compass"></i> Explore Prompts</a>
+        <a href="contact.html" class="btn btn-outline btn-lg"><i class="fa fa-envelope"></i> Get in Touch</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="logo-icon-text"><img src="/logo.png" alt="logo"></a>
+        <p>The premium destination for AI prompt creators worldwide.</p>
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          </div>
+      </div>
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <a href="feed.html">All Prompts</a>
+        <a href="categories.html">Categories</a>
+        <a href="videos.html">AI Videos</a>
+        <a href="search.html">Search</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-links">
+        <h4>AI Tools</h4>
+        <a href="feed.html?category=midjourney">Midjourney</a>
+        <a href="feed.html?category=kling-ai">Kling AI</a>
+        <a href="feed.html?category=chatgpt">ChatGPT</a>
+        <a href="feed.html?category=runway-ai">Runway ML</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 PromptHub. All rights reserved. &nbsp;|&nbsp; Developed by <strong>Alvortix Tech Services</strong></p>
+    </div>
+  </div>
+</footer>
+
+<nav class="mobile-nav">
+  <a href="../index.html" class="mobile-nav-item"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="feed.html" class="mobile-nav-item"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="search.html" class="mobile-nav-item"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="videos.html" class="mobile-nav-item"><i class="fa fa-play-circle"></i><span>Videos</span></a>
+  <a href="contact.html" class="mobile-nav-item"><i class="fa fa-envelope"></i><span>Contact</span></a>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<style>
+@media(min-width:900px){.about-mission-grid{grid-template-columns:1fr 1fr !important;}}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:60});
+initNavbarScroll(); initHamburger(); initThemeToggle(); initMagneticButtons(); initCounters();
+</script>
+</body>
+</html>

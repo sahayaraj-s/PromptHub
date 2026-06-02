@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Dashboard – PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon-text"><img src="/logo.png" alt="logo"></span>
+      <div style="font-size:0.72rem;color:var(--text-dim);margin-top:2px">Admin Panel</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link active"><i class="fa fa-chart-line"></i> Dashboard</a>
+      <a href="upload.html" class="sidebar-link"><i class="fa fa-upload"></i> Upload Prompt</a>
+      <a href="posts.html" class="sidebar-link"><i class="fa fa-th-large"></i> Manage Posts</a>
+      <a href="categories.html" class="sidebar-link"><i class="fa fa-folder"></i> Categories</a>
+      
+      <a href="messages.html" class="sidebar-link"><i class="fa fa-envelope"></i> Messages <span class="msg-badge" id="msgBadge" style="display:none"></span></a>
+      <a href="analytics.html" class="sidebar-link"><i class="fa fa-bar-chart"></i> Analytics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../index.html" class="sidebar-link" target="_blank"><i class="fa fa-globe"></i> View Site</a>
+      <button class="sidebar-link" onclick="adminSignOut()" style="width:100%;text-align:left"><i class="fa fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-header">
+      <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+      <h1 class="admin-page-title">Dashboard Overview</h1>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:12px">
+        <div class="user-menu">
+          </div>
+        <span id="adminUserInfo" style="font-size:0.875rem;color:var(--text-muted)"></span>
+        <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <!-- STATS -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="loading-spinner" style="margin:0 auto"></div></div>
+        <div class="stat-card"></div><div class="stat-card"></div><div class="stat-card"></div>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="admin-section">
+        <h2 class="admin-section-title">⚡ Quick Actions</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <a href="upload.html" class="btn btn-primary"><i class="fa fa-plus"></i> New Prompt</a>
+          <a href="posts.html" class="btn btn-outline"><i class="fa fa-edit"></i> Manage Posts</a>
+          
+          <a href="messages.html" class="btn btn-outline"><i class="fa fa-envelope"></i> Messages</a>
+          <a href="analytics.html" class="btn btn-outline"><i class="fa fa-bar-chart"></i> Analytics</a>
+        </div>
+      </div>
+
+      <!-- RECENT POSTS -->
+      <div class="admin-section">
+        <h2 class="admin-section-title">🕒 Recent Prompts</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr><th>Title</th><th>Tool</th><th>Type</th><th>Likes</th><th>Views</th><th>Copies</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="recentBody">
+              <tr><td colspan="9" style="text-align:center;padding:24px"><div class="loading-spinner" style="margin:0 auto"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TWO COL -->
+      <div class="admin-two-col">
+        <div class="admin-section">
+          <h2 class="admin-section-title">🔥 Most Liked</h2>
+          <div id="mostLiked"><div class="loading-spinner" style="margin:0 auto"></div></div>
+        </div>
+        <div class="admin-section">
+          <h2 class="admin-section-title">📋 Most Copied</h2>
+          <div id="mostCopied"><div class="loading-spinner" style="margin:0 auto"></div></div>
+        </div>
+      </div>
+
+      <!-- RECENT MESSAGES -->
+      <div class="admin-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h2 class="admin-section-title" style="margin:0">📩 Latest Messages</h2>
+          <a href="messages.html" class="btn btn-ghost btn-sm">View All</a>
+        </div>
+        <div id="recentMsgs"><div class="loading-spinner" style="margin:0 auto"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<style>
+.msg-badge{background:#EF4444;color:#fff;font-size:0.65rem;font-weight:700;padding:1px 6px;border-radius:50px;margin-left:auto;}
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script>
+  initThemeToggle();
+  initAdminAuth(async (user, userData) => {
+    loadDashboard();
+  });
+
+  async function loadDashboard() {
+    try {
+      const [analytics, contacts, categories] = await Promise.all([DB.getAnalytics(), DB.getContacts(3), DB.getCategories(false).catch(()=>[])]);
+      renderStats(analytics);
+      // Update categories count in UI if element exists
+      const catCount = document.getElementById('categoriesCount');
+      if(catCount) catCount.textContent = categories.length;
+      renderRecent();
+      renderTopLists(analytics);
+      renderRecentMsgs(contacts);
+      // Unread badge
+      const unread = contacts.filter(c=>!c.read).length;
+      if(unread>0){const b=document.getElementById('msgBadge');b.textContent=unread;b.style.display='inline-block';}
+    } catch(e) { showToast('Dashboard error: '+e.message,'error'); }
+  }
+
+  function renderStats(a) {
+    // Inject categories stat card if element exists
+    const catStatEl = document.getElementById('catStatCard');
+    if(catStatEl) catStatEl.remove();
+    const stats=[
+      {icon:'fa-th-large',label:'Total Prompts',value:a.totalPrompts,color:'#7C3AED',bg:'rgba(124,58,237,0.15)'},
+      {icon:'fa-eye',label:'Total Views',value:a.totalViews,color:'#00E5FF',bg:'rgba(0,229,255,0.15)'},
+      {icon:'fa-heart',label:'Total Likes',value:a.totalLikes,color:'#FF4ECD',bg:'rgba(255,78,205,0.15)'},
+      {icon:'fa-copy',label:'Total Copies',value:a.totalCopies,color:'#F59E0B',bg:'rgba(245,158,11,0.15)'},
+      {icon:'fa-folder',label:'Categories',value:typeof categories!=='undefined'?categories.length:'—',color:'#10B981',bg:'rgba(16,185,129,0.15)'},
+    ];
+    document.getElementById('statsGrid').innerHTML=stats.map(s=>`
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:${s.bg};color:${s.color}"><i class="fa ${s.icon}"></i></div>
+        <div class="stat-card-body">
+          <div class="stat-card-value">${formatNumber(s.value)}</div>
+          <div class="stat-card-label">${s.label}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  async function renderRecent() {
+    const body=document.getElementById('recentBody');
+    try {
+      const prompts=await DB.getPrompts({limit:8,orderBy:'createdAt'});
+      if(!prompts.length){body.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:24px">No prompts yet. <a href="upload.html" style="color:var(--primary-light)">Upload your first!</a></td></tr>';return;}
+      body.innerHTML=prompts.map(p=>`
+        <tr>
+          <td style="font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)">${sanitize(p.title||'')}</td>
+          <td><span class="table-badge">${sanitize(p.tool||'')}</span></td>
+          <td><span style="font-size:0.75rem">${p.type==='video'?'🎬':'🖼️'} ${p.type||'image'}</span></td>
+          <td style="color:var(--text-muted)">${formatNumber(p.likes||0)}</td>
+          <td style="color:var(--text-muted)">${formatNumber(p.views||0)}</td>
+          <td style="color:var(--text-muted)">${formatNumber(p.copies||0)}</td>
+          <td><span style="font-size:0.72rem;padding:2px 8px;border-radius:50px;background:${p.published!==false?'rgba(16,185,129,0.1)':'rgba(239,68,68,0.1)'};color:${p.published!==false?'#10B981':'#EF4444'}">${p.published!==false?'Live':'Hidden'}</span></td>
+          <td style="color:var(--text-dim);font-size:0.78rem;white-space:nowrap">${formatDate(p.createdAt)}</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <a href="../pages/prompt.html?id=${p.id}" target="_blank" class="btn-icon btn-sm-icon" title="View"><i class="fa fa-eye"></i></a>
+              <a href="upload.html?edit=${p.id}" class="btn-icon btn-sm-icon" title="Edit"><i class="fa fa-edit"></i></a>
+              <button class="btn-icon btn-sm-icon danger" onclick="delPrompt('${p.id}')" title="Delete"><i class="fa fa-trash"></i></button>
+            </div>
+          </td>
+        </tr>`).join('');
+    } catch(e){body.innerHTML=`<tr><td colspan="9" style="color:var(--text-muted)">Error: ${e.message}</td></tr>`;}
+  }
+
+  function renderTopLists(a) {
+    const mkList=(items,field)=>items.length?items.map((p,i)=>`<div class="top-item"><span class="top-rank">#${i+1}</span><span class="top-title">${sanitize(p.title||'Untitled')}</span><span class="top-value">${formatNumber(p[field]||0)}</span></div>`).join(''):'<p style="color:var(--text-muted)">No data yet</p>';
+    document.getElementById('mostLiked').innerHTML=mkList(a.topByLikes||[],'likes');
+    document.getElementById('mostCopied').innerHTML=mkList(a.topByCopies||[],'copies');
+  }
+
+  function renderRecentMsgs(msgs) {
+    const el=document.getElementById('recentMsgs');
+    if(!msgs.length){el.innerHTML='<p style="color:var(--text-muted);text-align:center;padding:20px">No messages yet.</p>';return;}
+    el.innerHTML=msgs.map(m=>`
+      <div class="msg-card ${m.read?'':'unread'}" style="margin-bottom:12px">
+        <div class="msg-header">
+          <div style="display:flex;align-items:center;gap:8px">${!m.read?'<div class="unread-dot"></div>':''}<span class="msg-sender">${sanitize(m.name||'Unknown')}</span><span class="msg-email">&lt;${sanitize(m.email||'')}&gt;</span></div>
+          <span class="msg-time">${formatDate(m.createdAt)}</span>
+        </div>
+        <div class="msg-subject">${sanitize(m.subject||'(No subject)')}</div>
+        <div class="msg-body">${sanitize((m.message||'').substring(0,120))}${(m.message||'').length>120?'...':''}</div>
+      </div>`).join('');
+  }
+
+  async function delPrompt(id) {
+    if(!confirm('Delete this prompt?')) return;
+    try { await DB.deletePrompt(id); showToast('Deleted','success'); renderRecent(); } catch(e){showToast('Error: '+e.message,'error');}
+  }
+  function toggleSidebar(){document.getElementById('adminSidebar').classList.toggle('open');}
+</script>
+</body>
+</html>

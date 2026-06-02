@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AI Videos – PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span class="logo-icon-text" style="display:none">⚡ PromptHub</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="feed.html" class="nav-link">Explore</a>
+      <a href="categories.html" class="nav-link">Categories</a>
+      <a href="videos.html" class="nav-link active">Videos</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      <a href="search.html" class="btn-icon"><i class="fa fa-search"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<main style="padding-top:calc(var(--nav-height)+40px);padding-bottom:80px">
+  <div class="container">
+    <div class="section-header" style="text-align:left;margin-bottom:28px">
+      <div class="section-tag">🎬 AI Videos</div>
+      <h1 class="page-title" style="text-align:left">AI Video Prompts</h1>
+      <p class="page-sub" style="text-align:left">Copy-ready prompts for Kling AI, Runway ML, Sora and more</p>
+    </div>
+    <div class="filters-bar" style="margin-bottom:28px">
+      <button class="filter-btn active" onclick="filterVideos('',this)">All Videos</button>
+      <button class="filter-btn" onclick="filterVideos('Kling AI',this)">⚡ Kling AI</button>
+      <button class="filter-btn" onclick="filterVideos('Runway ML',this)">🎬 Runway</button>
+      <button class="filter-btn" onclick="filterVideos('Sora',this)">🌊 Sora</button>
+      <button class="filter-btn" onclick="filterVideos('Leonardo AI',this)">🎭 Leonardo</button>
+    </div>
+    <div class="video-grid" id="videoGrid">
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+    </div>
+    <div style="text-align:center;margin-top:40px">
+      <button class="btn btn-outline" id="loadMoreBtn" style="display:none" onclick="loadVideos(currentTool,true)">
+        <i class="fa fa-refresh"></i> Load More Videos
+      </button>
+    </div>
+  </div>
+</main>
+<nav class="mobile-nav">
+  <a href="../index.html" class="mobile-nav-item"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="feed.html" class="mobile-nav-item"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="search.html" class="mobile-nav-item"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="videos.html" class="mobile-nav-item active"><i class="fa fa-play-circle"></i><span>Videos</span></a>
+  <a href="contact.html" class="mobile-nav-item"><i class="fa fa-envelope"></i><span>Contact</span></a>
+</nav>
+<footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2024 PromptHub. All rights reserved. &nbsp;|&nbsp; Developed by <strong>Alvortix Tech Services</strong></p></div></div></footer>
+<div id="toast" class="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+initNavbarScroll(); initHamburger(); initThemeToggle();
+let currentTool='';
+
+function buildVideoCard(v,i){
+  const thumb=v.thumbnailUrl||v.imageUrl||'';
+  return `
+  <div class="video-card" onclick="viewPrompt('${v.id}')" style="animation:fadeUp 0.5s ease both;animation-delay:${i*0.07}s">
+    <div class="video-thumb">
+      ${thumb?`<img src="${thumb}" alt="${sanitize(v.title||'')}" loading="lazy"/>`:`<div style="height:100%;background:linear-gradient(135deg,var(--bg-2),var(--bg-3));display:flex;align-items:center;justify-content:center;font-size:3rem">🎬</div>`}
+      <div class="video-play"><div class="video-play-icon"><i class="fa fa-play"></i></div></div>
+      <div class="video-duration">${v.duration||'AI Video'}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-tool-tag">${getToolEmoji(v.tool)} ${sanitize(v.tool||'AI')}</div>
+      <div class="card-title">${sanitize(v.title||'Video Prompt')}</div>
+      <div class="card-desc">${sanitize(v.description||'')}</div>
+      <div class="card-meta" style="margin-top:8px">
+        <span><i class="fa fa-eye"></i> ${formatNumber(v.views||0)}</span>
+        <span>·</span><span><i class="fa fa-heart"></i> ${formatNumber(v.likes||0)}</span>
+        <span>·</span><span>${formatDate(v.createdAt)}</span>
+      </div>
+    </div>
+    <div class="card-footer" onclick="event.stopPropagation()">
+      <span class="card-action-btn"><i class="fa fa-eye"></i> ${formatNumber(v.views||0)}</span>
+      <button class="card-copy-btn" onclick="handleCopy('${v.id}',\`${escapeText(v.prompt||'')}\`,this)"><i class="fa fa-copy"></i> Copy</button>
+    </div>
+  </div>`;
+}
+function escapeText(t){return t.replace(/`/g,'\\`').replace(/\$/g,'\\$');}
+
+async function loadVideos(tool='',append=false){
+  const grid=document.getElementById('videoGrid');
+  if(!append) grid.innerHTML=Array(6).fill('<div class="skeleton-card skeleton-video"></div>').join('');
+  try {
+    const opts={type:'video',limit:12,orderBy:'createdAt'};
+    if(tool) opts.tool=tool;
+    const videos=await DB.getPrompts(opts);
+    if(!append) grid.innerHTML='';
+    if(!videos.length&&!append){
+      grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🎬</div><h3>Video prompts coming soon!</h3>
+        <p>Admin is uploading video prompts. Check back shortly.</p>
+        <a href="feed.html" class="btn btn-primary">Browse All Prompts</a>
+      </div>`;
+      return;
+    }
+    videos.forEach((v,i)=>{const d=document.createElement('div');d.innerHTML=buildVideoCard(v,i);grid.appendChild(d.firstElementChild);});
+    document.getElementById('loadMoreBtn').style.display=videos.length>=12?'inline-flex':'none';
+  } catch(e){
+    if(!append) grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">⚠️</div><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+}
+
+function filterVideos(tool,btn){
+  currentTool=tool;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadVideos(tool);
+}
+loadVideos();
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Creators – PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo"><span class="logo-icon-text">⚡ PromptHub</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="feed.html" class="nav-link">Explore</a>
+      <a href="categories.html" class="nav-link">Categories</a>
+      <a href="creators.html" class="nav-link active">Creators</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      <div id="authButtons"><a href="../admin/login.html" class="btn btn-ghost">Login</a><a href="../admin/login.html" class="btn btn-primary">Get Started</a></div>
+      <div id="userMenu" style="display:none" class="user-menu">
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="saved.html"><i class="fa fa-bookmark"></i> Saved</a>
+          <button onclick="signOutUser()"><i class="fa fa-sign-out-alt"></i> Logout</button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main style="padding-top:calc(var(--nav-height)+48px);padding-bottom:80px">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div class="section-tag">👥 Community</div>
+      <h1 class="page-title">Featured Creators</h1>
+      <p class="page-sub">The brilliant minds behind the best AI prompts</p>
+    </div>
+
+    <!-- FEATURED CREATOR HERO -->
+    <div class="admin-section" style="margin-bottom:32px;padding:40px;text-align:center;background:rgba(124,58,237,0.06);border-color:rgba(124,58,237,0.2)" data-aos="zoom-in">
+      <div style="font-size:3rem;margin-bottom:16px">🌟</div>
+      <h2 style="font-family:var(--font-heading);font-size:1.4rem;font-weight:800;margin-bottom:8px">PromptHub Official</h2>
+      <p style="color:var(--text-muted);font-size:0.9rem;max-width:400px;margin:0 auto 20px">The official PromptHub team curating the best AI prompts daily</p>
+      <div style="display:flex;justify-content:center;gap:32px;margin-bottom:20px">
+        <div style="text-align:center"><div style="font-family:var(--font-heading);font-weight:800;font-size:1.3rem" id="officialPrompts">–</div><div style="font-size:0.75rem;color:var(--text-dim)">Prompts</div></div>
+        <div style="text-align:center"><div style="font-family:var(--font-heading);font-weight:800;font-size:1.3rem" id="officialLikes">–</div><div style="font-size:0.75rem;color:var(--text-dim)">Total Likes</div></div>
+        <div style="text-align:center"><div style="font-family:var(--font-heading);font-weight:800;font-size:1.3rem" id="officialViews">–</div><div style="font-size:0.75rem;color:var(--text-dim)">Total Views</div></div>
+      </div>
+      <a href="feed.html" class="btn btn-primary"><i class="fa fa-compass"></i> Browse All Prompts</a>
+    </div>
+
+    <!-- CREATORS GRID -->
+    <div class="creators-grid" id="creatorsGrid">
+      <div class="skeleton-card" style="height:240px"></div>
+      <div class="skeleton-card" style="height:240px"></div>
+      <div class="skeleton-card" style="height:240px"></div>
+      <div class="skeleton-card" style="height:240px"></div>
+    </div>
+
+    <!-- JOIN CTA -->
+    <div class="cta-card" style="margin-top:60px;padding:48px 32px;text-align:center" data-aos="zoom-in">
+      <h2 style="font-family:var(--font-heading);font-size:1.6rem;font-weight:800;margin-bottom:12px">Want to be a Featured Creator?</h2>
+      <p style="color:var(--text-muted);margin-bottom:28px">Join our community and share your AI prompts with thousands of creators</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="../admin/login.html" class="btn btn-primary btn-lg"><i class="fa fa-rocket"></i> Join Now Free</a>
+        <a href="feed.html" class="btn btn-outline btn-lg">Explore Prompts</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<nav class="mobile-nav">
+  <a href="../index.html" class="mobile-nav-item"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="feed.html" class="mobile-nav-item"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="search.html" class="mobile-nav-item"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="saved.html" class="mobile-nav-item"><i class="fa fa-bookmark"></i><span>Saved</span></a>
+  </nav>
+
+<div id="toast" class="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+  AOS.init({ duration: 600, once: true });
+  initNavbarScroll(); initHamburger(); initThemeToggle();
+
+  const DEMO_CREATORS = [
+    { name: 'PromptMaster', emoji: '🎨', bio: 'Midjourney expert with 500+ viral prompts', prompts: 142, likes: 8400, views: 52000 },
+    { name: 'VideoAI Pro', emoji: '🎬', bio: 'Kling AI & Runway specialist creating cinematic content', prompts: 89, likes: 5200, views: 34000 },
+    { name: 'AIArtistX', emoji: '✨', bio: 'DALL·E 3 and Stable Diffusion aficionado', prompts: 67, likes: 3800, views: 28000 },
+    { name: 'PromptWizard', emoji: '🔮', bio: 'ChatGPT prompt engineer helping creators scale', prompts: 234, likes: 12000, views: 78000 },
+    { name: 'CinematicAI', emoji: '🎞️', bio: 'Creating Hollywood-level AI visuals', prompts: 45, likes: 2900, views: 19000 },
+    { name: 'NeonDreamer', emoji: '🌃', bio: 'Cyberpunk and neon aesthetic specialist', prompts: 78, likes: 4500, views: 31000 },
+  ];
+
+  async function loadCreators() {
+    // Official stats
+    try {
+      const snap = await db.collection('prompts').where('published','==',true).get();
+      const prompts = snap.docs.map(d => d.data());
+      const totalLikes = prompts.reduce((s,p) => s+(p.likes||0), 0);
+      const totalViews = prompts.reduce((s,p) => s+(p.views||0), 0);
+      document.getElementById('officialPrompts').textContent = formatNumber(prompts.length);
+      document.getElementById('officialLikes').textContent = formatNumber(totalLikes);
+      document.getElementById('officialViews').textContent = formatNumber(totalViews);
+    } catch {}
+
+    // Render demo creators
+    const grid = document.getElementById('creatorsGrid');
+    grid.innerHTML = DEMO_CREATORS.map((c, i) => `
+      <div class="creator-card" data-aos="fade-up" data-aos-delay="${i*60}">
+        <div class="creator-avatar" style="width:72px;height:72px;font-size:2rem">${c.emoji}</div>
+        <div class="creator-name">${c.name}</div>
+        <div class="creator-bio">${c.bio}</div>
+        <div class="creator-stats">
+          <div class="creator-stat">
+            <div class="creator-stat-num">${formatNumber(c.prompts)}</div>
+            <div class="creator-stat-label">Prompts</div>
+          </div>
+          <div class="creator-stat">
+            <div class="creator-stat-num">${formatNumber(c.likes)}</div>
+            <div class="creator-stat-label">Likes</div>
+          </div>
+          <div class="creator-stat">
+            <div class="creator-stat-num">${formatNumber(c.views)}</div>
+            <div class="creator-stat-label">Views</div>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <a href="feed.html?creator=${encodeURIComponent(c.name)}" class="btn btn-outline btn-sm" style="width:100%;justify-content:center">View Prompts</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  loadCreators();
+</script>
+</body>
+</html>

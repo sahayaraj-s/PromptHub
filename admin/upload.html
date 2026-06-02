@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Upload Prompt – Admin PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo"><span class="logo-icon-text"><img src="/logo.png" alt="logo"></span><div style="font-size:0.72rem;color:var(--text-dim)">Admin Panel</div></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><i class="fa fa-chart-line"></i> Dashboard</a>
+      <a href="upload.html" class="sidebar-link active"><i class="fa fa-upload"></i> Upload Prompt</a>
+      <a href="posts.html" class="sidebar-link"><i class="fa fa-th-large"></i> Manage Posts</a>
+      <a href="categories.html" class="sidebar-link"><i class="fa fa-folder"></i> Categories</a>
+      
+      <a href="messages.html" class="sidebar-link"><i class="fa fa-envelope"></i> Messages</a>
+      <a href="analytics.html" class="sidebar-link"><i class="fa fa-bar-chart"></i> Analytics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../index.html" target="_blank" class="sidebar-link"><i class="fa fa-globe"></i> View Site</a>
+      <button class="sidebar-link" onclick="adminSignOut()" style="width:100%;text-align:left"><i class="fa fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </aside>
+  <div class="admin-main">
+    <header class="admin-header">
+      <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+      <h1 class="admin-page-title" id="pageTitle">Upload New Prompt</h1>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+        <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      </div>
+    </header>
+    <div class="admin-content">
+      <div class="admin-section" style="max-width:900px">
+        <form onsubmit="event.preventDefault();submitPrompt()">
+          <div class="upload-form-grid">
+            <div class="form-group form-full"><label class="form-label">Title *</label><input type="text" id="fTitle" class="form-control" placeholder="e.g. Cinematic AI Portrait – Golden Hour" required oninput="document.getElementById('fSlug').value=generateSlug(this.value)"/></div>
+            <div class="form-group form-full"><label class="form-label">Slug</label><input type="text" id="fSlug" class="form-control" placeholder="auto-generated"/></div>
+            <div class="form-group form-full"><label class="form-label">Description *</label><textarea id="fDesc" class="form-control" rows="3" placeholder="Short description..." required></textarea></div>
+            <div class="form-group form-full"><label class="form-label">Full Prompt *</label><textarea id="fPrompt" class="form-control" rows="6" placeholder="Paste the full AI prompt here..." required style="font-family:'Courier New',monospace;color:var(--secondary)"></textarea></div>
+            <div class="form-group"><label class="form-label">AI Tool *</label>
+              <select id="fTool" class="form-control" required><option value="">Select Tool</option><option>Midjourney</option><option>ChatGPT</option><option>Kling AI</option><option>Runway ML</option><option>Gemini</option><option>Leonardo AI</option><option>DALL·E 3</option><option>Stable Diffusion</option><option>Sora</option><option>Claude</option><option>Other</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Category *</label>
+              <select id="fCategory" class="form-control" required><option value="">Loading categories...</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Type *</label>
+              <select id="fType" class="form-control" required><option value="">Select Type</option><option value="image">Image</option><option value="video">Video</option><option value="text">Text</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Creator Name</label><input type="text" id="fCreator" class="form-control" placeholder="Creator name"/></div>
+            <div class="form-group form-full"><label class="form-label">Tags (press Enter)</label>
+              <div class="tags-input-wrap" id="tagsWrap"><input type="text" class="tags-input" id="tagInput" placeholder="Add tag..."/></div>
+              <input type="hidden" id="fTags"/>
+            </div>
+            <div class="form-group form-full"><label class="form-label">Thumbnail / Preview Image</label>
+              <div class="upload-zone" id="thumbZone" onclick="document.getElementById('thumbFile').click()">
+                <div class="upload-zone-icon">🖼️</div><div class="upload-zone-text"><strong>Click or drag</strong> to upload thumbnail</div><div style="font-size:0.78rem;color:var(--text-dim);margin-top:4px">JPG, PNG, WebP – max 10MB</div>
+              </div>
+              <input type="file" id="thumbFile" accept="image/*" style="display:none" onchange="handleThumb(this)"/>
+              <div id="thumbPreview" class="upload-preview" style="display:none"></div>
+              <div class="progress-wrap" id="thumbProg" style="display:none"><div class="progress-fill" id="thumbProgFill"></div></div>
+              <div id="thumbStatus" style="font-size:0.78rem;color:var(--text-muted);margin-top:4px"></div>
+              <input type="hidden" id="fThumbUrl"/>
+            </div>
+            <div class="form-group form-full"><label class="form-label">Media File (Image or Video)</label>
+              <div class="upload-zone" id="mediaZone" onclick="document.getElementById('mediaFile').click()">
+                <div class="upload-zone-icon">📁</div><div class="upload-zone-text"><strong>Click or drag</strong> to upload media</div><div style="font-size:0.78rem;color:var(--text-dim);margin-top:4px">MP4, WebM, JPG, PNG – max 100MB</div>
+              </div>
+              <input type="file" id="mediaFile" accept="image/*,video/*" style="display:none" onchange="handleMedia(this)"/>
+              <div id="mediaPreview" class="upload-preview" style="display:none"></div>
+              <div class="progress-wrap" id="mediaProg" style="display:none"><div class="progress-fill" id="mediaProgFill"></div></div>
+              <div id="mediaStatus" style="font-size:0.78rem;color:var(--text-muted);margin-top:4px"></div>
+              <input type="hidden" id="fMediaUrl"/>
+            </div>
+            <div class="form-group form-full">
+              <div style="display:flex;flex-wrap:wrap;gap:16px">
+                <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:0.875rem"><input type="checkbox" id="fFeatured"/> Featured ⭐</label>
+                <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:0.875rem"><input type="checkbox" id="fPinned"/> Pinned 📌</label>
+                <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:0.875rem"><input type="checkbox" id="fPublished" checked/> Published ✅</label>
+              </div>
+            </div>
+            <div class="form-group form-full" style="display:flex;gap:12px;flex-wrap:wrap">
+              <button type="submit" class="btn btn-primary" id="submitBtn" style="min-width:160px;justify-content:center"><i class="fa fa-upload"></i> <span id="submitTxt">Upload Prompt</span></button>
+              <button type="button" class="btn btn-ghost" onclick="resetForm()"><i class="fa fa-refresh"></i> Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script>
+initThemeToggle();
+let tags=[], editId=null;
+initAdminAuth(async(user)=>{
+  document.getElementById('fCreator').value=user.displayName||'';
+  // Load dynamic categories
+  populateCategorySelect(document.getElementById('fCategory')).catch(()=>{});
+  editId=getParam('edit');
+  if(editId){document.getElementById('pageTitle').textContent='Edit Prompt';document.getElementById('submitTxt').textContent='Update Prompt';loadEdit(editId);}
+});
+
+// Tags
+document.getElementById('tagInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'||e.key===','){e.preventDefault();const v=e.target.value.trim().replace(',','');if(v&&!tags.includes(v)){tags.push(v);renderTags();}e.target.value='';}
+});
+function renderTags(){
+  const w=document.getElementById('tagsWrap'),inp=document.getElementById('tagInput');
+  w.querySelectorAll('.tag-chip').forEach(c=>c.remove());
+  tags.forEach(t=>{const c=document.createElement('div');c.className='tag-chip';c.innerHTML=`${t}<button onclick="removeTag('${t}')">×</button>`;w.insertBefore(c,inp);});
+  document.getElementById('fTags').value=JSON.stringify(tags);
+}
+function removeTag(t){tags=tags.filter(x=>x!==t);renderTags();}
+
+// Drag & drop
+function initDrop(zone,input){
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');if(e.dataTransfer.files[0]){input.files=e.dataTransfer.files;input.dispatchEvent(new Event('change'));}});
+}
+initDrop(document.getElementById('thumbZone'),document.getElementById('thumbFile'));
+initDrop(document.getElementById('mediaZone'),document.getElementById('mediaFile'));
+
+async function handleThumb(inp){
+  const f=inp.files[0];if(!f)return;
+  document.getElementById('thumbPreview').innerHTML=`<img src="${URL.createObjectURL(f)}" alt="preview"/>`;
+  document.getElementById('thumbPreview').style.display='block';
+  document.getElementById('thumbProg').style.display='block';
+  document.getElementById('thumbStatus').textContent='Uploading...';
+  try{
+    const r=await Cloudinary.upload(f,p=>document.getElementById('thumbProgFill').style.width=p+'%');
+    document.getElementById('fThumbUrl').value=r.secure_url;
+    document.getElementById('thumbStatus').textContent='✅ Uploaded!';
+    document.getElementById('thumbStatus').style.color='#10B981';
+  }catch(e){document.getElementById('thumbStatus').textContent='❌ '+e.message;document.getElementById('thumbStatus').style.color='#EF4444';}
+}
+
+async function handleMedia(inp){
+  const f=inp.files[0];if(!f)return;
+  const isVid=f.type.startsWith('video/');
+  const url=URL.createObjectURL(f);
+  document.getElementById('mediaPreview').innerHTML=isVid?`<video src="${url}" controls muted></video>`:`<img src="${url}" alt="preview"/>`;
+  document.getElementById('mediaPreview').style.display='block';
+  document.getElementById('mediaProg').style.display='block';
+  document.getElementById('mediaStatus').textContent='Uploading...';
+  if(isVid) document.getElementById('fType').value='video';
+  try{
+    const r=await Cloudinary.upload(f,p=>document.getElementById('mediaProgFill').style.width=p+'%');
+    document.getElementById('fMediaUrl').value=r.secure_url;
+    if(isVid&&!document.getElementById('fThumbUrl').value) document.getElementById('fThumbUrl').value=Cloudinary.thumbnailUrl(r.public_id);
+    document.getElementById('mediaStatus').textContent=`✅ ${isVid?'Video':'Image'} uploaded!`;
+    document.getElementById('mediaStatus').style.color='#10B981';
+  }catch(e){document.getElementById('mediaStatus').textContent='❌ '+e.message;document.getElementById('mediaStatus').style.color='#EF4444';}
+}
+
+async function submitPrompt(){
+  const title=document.getElementById('fTitle').value.trim();
+  const desc=document.getElementById('fDesc').value.trim();
+  const prompt=document.getElementById('fPrompt').value.trim();
+  const tool=document.getElementById('fTool').value;
+  const category=document.getElementById('fCategory').value;
+  const type=document.getElementById('fType').value;
+  if(!title||!desc||!prompt||!tool||!category||!type){showToast('Fill all required fields','error');return;}
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.innerHTML='<i class="fa fa-spinner fa-spin"></i> Saving...';
+  const data={
+    title,description:desc,prompt,tool,category,type,
+    creatorName:document.getElementById('fCreator').value||'PromptHub',
+    tags,
+    mediaUrl:document.getElementById('fMediaUrl').value,
+    imageUrl:type!=='video'?document.getElementById('fMediaUrl').value:'',
+    thumbnailUrl:document.getElementById('fThumbUrl').value,
+    slug:document.getElementById('fSlug').value||generateSlug(title),
+    featured:document.getElementById('fFeatured').checked,
+    pinned:document.getElementById('fPinned').checked,
+    published:document.getElementById('fPublished').checked,
+  };
+  try{
+    if(editId) await DB.updatePrompt(editId,data);
+    else await DB.createPrompt(data);
+    showToast(editId?'Prompt updated! ✅':'Prompt uploaded! 🚀','success');
+    if(!editId) resetForm();
+  }catch(e){showToast('Error: '+e.message,'error');}
+  btn.disabled=false;btn.innerHTML=`<i class="fa fa-upload"></i> <span id="submitTxt">${editId?'Update':'Upload'} Prompt</span>`;
+}
+
+async function loadEdit(id){
+  const p=await DB.getPrompt(id);if(!p)return;
+  await populateCategorySelect(document.getElementById('fCategory'),p.category||'');
+  document.getElementById('fTitle').value=p.title||'';
+  document.getElementById('fSlug').value=p.slug||'';
+  document.getElementById('fDesc').value=p.description||'';
+  document.getElementById('fPrompt').value=p.prompt||'';
+  document.getElementById('fTool').value=p.tool||'';
+  document.getElementById('fCategory').value=p.category||'';
+  document.getElementById('fType').value=p.type||'';
+  document.getElementById('fCreator').value=p.creatorName||'';
+  document.getElementById('fThumbUrl').value=p.thumbnailUrl||'';
+  document.getElementById('fMediaUrl').value=p.mediaUrl||'';
+  document.getElementById('fFeatured').checked=p.featured||false;
+  document.getElementById('fPinned').checked=p.pinned||false;
+  document.getElementById('fPublished').checked=p.published!==false;
+  tags=p.tags||[];renderTags();
+  if(p.thumbnailUrl){document.getElementById('thumbPreview').innerHTML=`<img src="${p.thumbnailUrl}" alt=""/>`;document.getElementById('thumbPreview').style.display='block';}
+  if(p.mediaUrl){const isVid=p.type==='video';document.getElementById('mediaPreview').innerHTML=isVid?`<video src="${p.mediaUrl}" controls muted></video>`:`<img src="${p.mediaUrl}" alt=""/>`;document.getElementById('mediaPreview').style.display='block';}
+}
+
+function resetForm(){
+  document.querySelectorAll('.form-control').forEach(el=>{if(el.tagName!=='SELECT')el.value='';else el.selectedIndex=0;});
+  document.getElementById('fPublished').checked=true;
+  document.getElementById('fFeatured').checked=false;
+  document.getElementById('fPinned').checked=false;
+  tags=[];renderTags();
+  ['thumbPreview','mediaPreview'].forEach(id=>{const el=document.getElementById(id);el.innerHTML='';el.style.display='none';});
+  ['thumbProg','mediaProg'].forEach(id=>document.getElementById(id).style.display='none');
+  ['thumbStatus','mediaStatus'].forEach(id=>document.getElementById(id).textContent='');
+}
+function toggleSidebar(){document.getElementById('adminSidebar').classList.toggle('open');}
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Explore Prompts – PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="../css/animations.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="../index.html" class="nav-logo">
+      <img src="../logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span class="logo-icon-text" style="display:none">⚡ PromptHub</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="feed.html" class="nav-link active">Explore</a>
+      <a href="categories.html" class="nav-link">Categories</a>
+      <a href="videos.html" class="nav-link">Videos</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      <a href="search.html" class="btn-icon"><i class="fa fa-search"></i></a>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main style="padding-top:var(--nav-height)">
+  <div class="container" style="padding-top:36px;padding-bottom:80px">
+
+    <!-- PAGE HEADER -->
+    <div style="margin-bottom:28px">
+      <h1 style="font-family:var(--font-heading);font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;margin-bottom:6px">
+        🔍 Explore Prompts
+      </h1>
+      <p style="color:var(--text-muted);font-size:0.9rem">Discover the best AI prompts for every tool and style</p>
+    </div>
+
+    <!-- SEARCH BAR -->
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <div style="flex:1;display:flex;align-items:center;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius-sm);padding:0 16px;gap:10px;transition:var(--transition)" id="searchBar">
+        <i class="fa fa-search" style="color:var(--text-dim);font-size:0.85rem"></i>
+        <input type="text" id="searchInput" style="flex:1;background:none;border:none;outline:none;color:var(--text);font-size:0.9rem;padding:12px 0;font-family:var(--font-body)" placeholder="Search prompts, tools, styles..."/>
+        <button id="clearSearch" onclick="clearSearch()" style="display:none;background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:0.85rem"><i class="fa fa-times"></i></button>
+      </div>
+      <button class="btn btn-primary" onclick="doSearch()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters-bar" style="margin-bottom:20px">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">🔥 All</button>
+      <button class="filter-btn" data-filter="trending" onclick="setFilter('trending',this)">📈 Trending</button>
+      <button class="filter-btn" data-filter="latest" onclick="setFilter('latest',this)">🆕 Latest</button>
+      <button class="filter-btn" data-filter="image" onclick="setFilter('image',this)">🖼️ Images</button>
+      <button class="filter-btn" data-filter="video" onclick="setFilter('video',this)">🎬 Videos</button>
+      <select class="filter-btn" id="categoryFilter" onchange="setCategoryFilter(this.value)" style="cursor:pointer">
+        <option value="">📁 All Categories</option>
+      </select>
+      <select class="filter-btn" id="toolFilter" onchange="setToolFilter(this.value)" style="cursor:pointer">
+        <option value="">🛠️ All Tools</option>
+        <option>Midjourney</option><option>ChatGPT</option><option>Kling AI</option>
+        <option>Runway ML</option><option>Gemini</option><option>Leonardo AI</option>
+        <option>DALL·E 3</option><option>Stable Diffusion</option><option>Sora</option><option>Claude</option>
+      </select>
+    </div>
+
+    <!-- RESULTS INFO -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <p id="resultsInfo" style="color:var(--text-muted);font-size:0.85rem">Loading prompts...</p>
+    </div>
+
+    <!-- GRID -->
+    <div class="prompt-grid" id="promptGrid">
+      <div class="skeleton-card"></div><div class="skeleton-card"></div>
+      <div class="skeleton-card"></div><div class="skeleton-card"></div>
+      <div class="skeleton-card"></div><div class="skeleton-card"></div>
+    </div>
+
+    <!-- LOAD MORE -->
+    <div style="text-align:center;margin-top:40px">
+      <button class="btn btn-outline" id="loadMoreBtn" style="display:none" onclick="loadMore()">
+        <i class="fa fa-refresh"></i> Load More
+      </button>
+      <div class="loading-spinner" id="loadSpinner" style="display:none;margin:0 auto"></div>
+    </div>
+  </div>
+</main>
+
+<nav class="mobile-nav">
+  <a href="../index.html" class="mobile-nav-item"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="feed.html" class="mobile-nav-item active"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="search.html" class="mobile-nav-item"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="videos.html" class="mobile-nav-item"><i class="fa fa-play-circle"></i><span>Videos</span></a>
+  <a href="contact.html" class="mobile-nav-item"><i class="fa fa-envelope"></i><span>Contact</span></a>
+</nav>
+<div id="toast" class="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script>
+initNavbarScroll(); initHamburger(); initThemeToggle();
+
+let currentFilter='all', currentTool='', currentCategory='', currentSearch='', isLoading=false;
+const PAGE_SIZE=12;
+
+// URL params
+const urlCat=getParam('category'), urlQ=getParam('q');
+if(urlCat){currentCategory=urlCat;}
+if(urlQ){currentSearch=urlQ;document.getElementById('searchInput').value=urlQ;document.getElementById('clearSearch').style.display='inline-block';}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  loadPrompts(true);
+  // Load dynamic categories into filter
+  loadDynamicCategories().then(cats=>{
+    const sel=document.getElementById('categoryFilter');
+    if(!sel)return;
+    cats.forEach(c=>{
+      const opt=document.createElement('option');
+      opt.value=c.slug||c.id;
+      opt.textContent=(c.icon||getCatEmoji(c.slug||c.id))+' '+c.name;
+      if((c.slug||c.id)===currentCategory) opt.selected=true;
+      sel.appendChild(opt);
+    });
+    if(currentCategory) sel.value=currentCategory;
+  }).catch(()=>{});
+  const si=document.getElementById('searchInput');
+  si.addEventListener('input',debounce(()=>{
+    const v=si.value.trim();
+    document.getElementById('clearSearch').style.display=v?'inline-block':'none';
+    currentSearch=v;
+    loadPrompts(true);
+  },400));
+  si.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+  // Infinite scroll
+  const sentinel=document.getElementById('loadMoreBtn');
+  if(sentinel){
+    new IntersectionObserver(es=>{if(es[0].isIntersecting&&!isLoading)loadMore();},{threshold:0.5}).observe(sentinel);
+  }
+});
+
+async function loadPrompts(reset=false) {
+  if(isLoading) return;
+  isLoading=true;
+  const grid=document.getElementById('promptGrid');
+  const spinner=document.getElementById('loadSpinner');
+  const lmBtn=document.getElementById('loadMoreBtn');
+  if(reset) grid.innerHTML=Array(6).fill('<div class="skeleton-card"></div>').join('');
+  spinner.style.display='block'; lmBtn.style.display='none';
+  try {
+    let prompts;
+    if(currentSearch){
+      prompts=await DB.searchPrompts(currentSearch);
+      if(currentTool) prompts=prompts.filter(p=>p.tool===currentTool);
+    } else {
+      const opts={limit:PAGE_SIZE};
+      if(currentFilter==='trending') opts.orderBy='likes';
+      else if(currentFilter==='latest') opts.orderBy='createdAt';
+      else if(currentFilter==='image') opts.type='image';
+      else if(currentFilter==='video') opts.type='video';
+      if(currentCategory) opts.category=currentCategory;
+      if(currentTool) opts.tool=currentTool;
+      prompts=await DB.getPrompts(opts);
+    }
+    if(reset) grid.innerHTML='';
+    if(!prompts.length&&reset){
+      grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">🔍</div>
+        <h3>No prompts found</h3>
+        <p>Try different keywords or filters. Admin will add prompts soon!</p>
+        <button class="btn btn-primary" onclick="clearFilters()">Clear Filters</button>
+      </div>`;
+    } else {
+      prompts.forEach((p,i)=>{const d=document.createElement('div');d.innerHTML=buildPromptCard(p,i);grid.appendChild(d.firstElementChild);});
+      if(prompts.length>=PAGE_SIZE) lmBtn.style.display='inline-flex';
+    }
+    const total=grid.querySelectorAll('.prompt-card').length;
+    document.getElementById('resultsInfo').textContent=`Showing ${total} prompt${total!==1?'s':''}`;
+  } catch(e){
+    if(reset) grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">⚠️</div><h3>Error</h3><p>${e.message}</p></div>`;
+  }
+  spinner.style.display='none'; isLoading=false;
+}
+
+function loadMore(){loadPrompts(false);}
+
+function setFilter(f,btn){
+  currentFilter=f; currentSearch='';
+  document.getElementById('searchInput').value='';
+  document.getElementById('clearSearch').style.display='none';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  loadPrompts(true);
+}
+
+function setToolFilter(tool){currentTool=tool;loadPrompts(true);}
+
+function doSearch(){currentSearch=document.getElementById('searchInput').value.trim();loadPrompts(true);}
+
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  document.getElementById('clearSearch').style.display='none';
+  currentSearch=''; loadPrompts(true);
+}
+
+function setCategoryFilter(cat){currentCategory=cat;loadPrompts(true);}
+
+function clearFilters(){
+  currentFilter='all'; currentSearch=''; currentTool=''; currentCategory='';
+  document.getElementById('categoryFilter').value='';
+  document.getElementById('searchInput').value='';
+  document.getElementById('clearSearch').style.display='none';
+  document.getElementById('toolFilter').value='';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-filter="all"]')?.classList.add('active');
+  loadPrompts(true);
+}
+</script>
+</body>
+</html>

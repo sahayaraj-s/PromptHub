@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Messages – Admin PromptHub</title>
+  <link rel="icon" href="../ti.jpeg" type="image/jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/main.css"/>
+  <link rel="stylesheet" href="admin.css"/>
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-logo"><span class="logo-icon-text"><img src="/logo.png" alt="logo"></span><div style="font-size:0.72rem;color:var(--text-dim)">Admin Panel</div></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><i class="fa fa-chart-line"></i> Dashboard</a>
+      <a href="upload.html" class="sidebar-link"><i class="fa fa-upload"></i> Upload Prompt</a>
+      <a href="posts.html" class="sidebar-link"><i class="fa fa-th-large"></i> Manage Posts</a>
+      <a href="categories.html" class="sidebar-link"><i class="fa fa-folder"></i> Categories</a>
+      
+      <a href="messages.html" class="sidebar-link active"><i class="fa fa-envelope"></i> Messages</a>
+      <a href="analytics.html" class="sidebar-link"><i class="fa fa-bar-chart"></i> Analytics</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../index.html" class="sidebar-link" target="_blank"><i class="fa fa-globe"></i> View Site</a>
+      <button class="sidebar-link" onclick="adminSignOut()" style="width:100%;text-align:left"><i class="fa fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-header">
+      <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+      <h1 class="admin-page-title">Contact Messages</h1>
+      <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
+        <button class="btn btn-outline btn-sm" onclick="markAllRead()"><i class="fa fa-check-double"></i> Mark All Read</button>
+        <button class="btn-icon theme-toggle" id="themeToggle"><i class="fa fa-moon"></i></button>
+      </div>
+    </header>
+
+    <div class="admin-content">
+      <!-- STATS -->
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:rgba(124,58,237,0.15);color:#7C3AED"><i class="fa fa-envelope"></i></div>
+          <div class="stat-card-body"><div class="stat-card-value" id="totalMsgs">–</div><div class="stat-card-label">Total Messages</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:rgba(239,68,68,0.15);color:#EF4444"><i class="fa fa-circle"></i></div>
+          <div class="stat-card-body"><div class="stat-card-value" id="unreadMsgs">–</div><div class="stat-card-label">Unread</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:rgba(16,185,129,0.15);color:#10B981"><i class="fa fa-check-circle"></i></div>
+          <div class="stat-card-body"><div class="stat-card-value" id="readMsgs">–</div><div class="stat-card-label">Read</div></div>
+        </div>
+      </div>
+
+      <!-- FILTER -->
+      <div class="admin-section" style="padding:14px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setFilter('unread',this)">🔴 Unread</button>
+          <button class="filter-btn" onclick="setFilter('read',this)">✅ Read</button>
+          <div style="margin-left:auto;position:relative">
+            <i class="fa fa-search" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:0.82rem"></i>
+            <input type="text" id="searchMsgs" class="form-control" style="padding-left:32px;width:200px" placeholder="Search messages..." oninput="filterMessages()"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- MESSAGES LIST -->
+      <div id="msgsList">
+        <div class="loading-spinner" style="margin:40px auto"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGE DETAIL MODAL -->
+<div class="modal-overlay" id="msgModal">
+  <div class="modal" style="max-width:600px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <h3 style="font-family:var(--font-heading);font-weight:700">Message Detail</h3>
+      <button class="btn-icon" onclick="closeModal()"><i class="fa fa-times"></i></button>
+    </div>
+    <div id="msgDetail"></div>
+    <div style="display:flex;gap:10px;margin-top:20px">
+      <a id="replyBtn" href="" class="btn btn-primary" style="flex:1;justify-content:center"><i class="fa fa-reply"></i> Reply via Email</a>
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/admin-auth.js"></script>
+<script>
+  initThemeToggle();
+  let allMsgs=[], currentFilter='all';
+
+  initAdminAuth(async()=>{ loadMessages(); });
+
+  async function loadMessages() {
+    try {
+      allMsgs = await DB.getContacts(100);
+      updateStats();
+      renderMessages();
+    } catch(e) { showToast('Error: '+e.message,'error'); }
+  }
+
+  function updateStats() {
+    const unread=allMsgs.filter(m=>!m.read).length;
+    document.getElementById('totalMsgs').textContent=allMsgs.length;
+    document.getElementById('unreadMsgs').textContent=unread;
+    document.getElementById('readMsgs').textContent=allMsgs.length-unread;
+  }
+
+  function setFilter(f, btn) {
+    currentFilter=f;
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMessages();
+  }
+
+  function filterMessages() { renderMessages(); }
+
+  function renderMessages() {
+    const search=(document.getElementById('searchMsgs').value||'').toLowerCase();
+    const el=document.getElementById('msgsList');
+    let msgs=allMsgs;
+    if(currentFilter==='unread') msgs=msgs.filter(m=>!m.read);
+    if(currentFilter==='read') msgs=msgs.filter(m=>m.read);
+    if(search) msgs=msgs.filter(m=>(m.name||'').toLowerCase().includes(search)||(m.email||'').toLowerCase().includes(search)||(m.subject||'').toLowerCase().includes(search)||(m.message||'').toLowerCase().includes(search));
+    if(!msgs.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><h3>No messages found</h3></div>';return;}
+    el.innerHTML=msgs.map(m=>`
+      <div class="msg-card ${m.read?'':'unread'}" style="margin-bottom:12px;cursor:pointer" onclick="openMsg('${m.id}')">
+        <div class="msg-header">
+          <div style="display:flex;align-items:center;gap:8px">
+            ${!m.read?'<div class="unread-dot"></div>':''}
+            <div>
+              <div class="msg-sender">${sanitize(m.name||'Anonymous')}</div>
+              <div class="msg-email">${sanitize(m.email||'')}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="msg-time">${formatDate(m.createdAt)}</span>
+            <button class="btn-icon btn-sm-icon danger" onclick="event.stopPropagation();deleteMsg('${m.id}')" title="Delete"><i class="fa fa-trash"></i></button>
+          </div>
+        </div>
+        <div class="msg-subject">${sanitize(m.subject||'(No subject)')}</div>
+        <div class="msg-body">${sanitize((m.message||'').substring(0,160))}${(m.message||'').length>160?'...':''}</div>
+        <div class="msg-actions">
+          ${!m.read?`<button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();markRead('${m.id}')"><i class="fa fa-check"></i> Mark Read</button>`:'<span style="font-size:0.75rem;color:var(--text-dim)">✅ Read</span>'}
+          <a href="mailto:${sanitize(m.email||'')}?subject=Re: ${encodeURIComponent(m.subject||'')}" class="btn btn-outline btn-sm" onclick="event.stopPropagation()"><i class="fa fa-reply"></i> Reply</a>
+        </div>
+      </div>`).join('');
+  }
+
+  function openMsg(id) {
+    const m=allMsgs.find(m=>m.id===id); if(!m)return;
+    if(!m.read) markRead(id);
+    document.getElementById('msgDetail').innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:2px">FROM</div><div style="font-weight:600">${sanitize(m.name||'')}</div></div>
+          <div><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:2px">EMAIL</div><div style="font-weight:600;color:var(--secondary)">${sanitize(m.email||'')}</div></div>
+          <div><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:2px">SUBJECT</div><div style="font-weight:600">${sanitize(m.subject||'(No subject)')}</div></div>
+          <div><div style="font-size:0.75rem;color:var(--text-dim);margin-bottom:2px">DATE</div><div>${formatDate(m.createdAt)}</div></div>
+        </div>
+        <div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:20px;line-height:1.8;color:var(--text-muted)">
+          ${sanitize(m.message||'').replace(/\n/g,'<br>')}
+        </div>
+      </div>`;
+    document.getElementById('replyBtn').href=`mailto:${m.email||''}?subject=Re: ${encodeURIComponent(m.subject||'')}`;
+    document.getElementById('msgModal').classList.add('open');
+  }
+
+  async function markRead(id) {
+    try {
+      await DB.markContactRead(id);
+      const m=allMsgs.find(m=>m.id===id); if(m) m.read=true;
+      updateStats(); renderMessages();
+    } catch(e){showToast('Error: '+e.message,'error');}
+  }
+
+  async function markAllRead() {
+    const unread=allMsgs.filter(m=>!m.read);
+    await Promise.all(unread.map(m=>DB.markContactRead(m.id)));
+    unread.forEach(m=>m.read=true);
+    updateStats(); renderMessages();
+    showToast('All marked as read','success');
+  }
+
+  async function deleteMsg(id) {
+    if(!confirm('Delete this message?')) return;
+    try { await DB.deleteContact(id); allMsgs=allMsgs.filter(m=>m.id!==id); updateStats(); renderMessages(); showToast('Deleted','success'); } catch(e){showToast('Error: '+e.message,'error');}
+  }
+
+  function closeModal(){document.getElementById('msgModal').classList.remove('open');}
+  document.getElementById('msgModal')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+  function toggleSidebar(){document.getElementById('adminSidebar').classList.toggle('open');}
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /pages/profile.html
+Disallow: /pages/saved.html
+
+Sitemap: https://prompthub.app/sitemap.xml

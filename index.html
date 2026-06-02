@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>PromptHub – Premium AI Prompts</title>
+  <meta name="description" content="Discover, copy & share the best AI prompts for Midjourney, Kling AI, Runway, ChatGPT and more."/>
+  <meta property="og:title" content="PromptHub – Premium AI Prompts"/>
+  <meta property="og:description" content="The #1 destination for AI prompt creators."/>
+  <meta property="og:type" content="website"/>
+  <link rel="icon" href="ti.jpeg" type="image/jpeg"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+      <span class="logo-icon-text" style="display:none">⚡ PromptHub</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="pages/feed.html" class="nav-link">Explore</a>
+      <a href="pages/categories.html" class="nav-link">Categories</a>
+      <a href="pages/videos.html" class="nav-link">Videos</a>
+      <a href="pages/about.html" class="nav-link">About</a>
+      <a href="pages/contact.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-icon theme-toggle" id="themeToggle" title="Toggle theme"><i class="fa fa-moon"></i></button>
+      <a href="pages/search.html" class="btn-icon"><i class="fa fa-search"></i></a>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO — Fixed mobile 16:9 responsive layout -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb1"></div>
+    <div class="hero-orb orb2"></div>
+    <div class="hero-orb orb3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge" data-aos="fade-down" data-aos-duration="500">
+      <span class="badge-dot"></span>
+      <span>🔥 Trending AI Prompts Updated Daily</span>
+    </div>
+    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
+      Unlock the Power of<br/>
+      <span class="gradient-text" id="typedText">AI Creativity</span>
+    </h1>
+    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="160" data-aos-duration="500">
+      Discover, copy & share premium prompts for Midjourney, DALL·E, Kling AI, Sora and 20+ tools.
+    </p>
+    <div class="hero-search" data-aos="fade-up" data-aos-delay="240" data-aos-duration="500">
+      <div class="search-wrapper">
+        <i class="fa fa-search search-icon"></i>
+        <input type="text" id="heroSearch" placeholder="Search prompts, tools, styles..." class="search-input"/>
+        <button class="search-btn" onclick="handleHeroSearch()">Search</button>
+      </div>
+      <div class="search-suggestions">
+        <span onclick="quickSearch('cinematic portrait')">cinematic portrait</span>
+        <span onclick="quickSearch('anime style')">anime style</span>
+        <span onclick="quickSearch('neon city')">neon city</span>
+        <span onclick="quickSearch('viral video')">viral video</span>
+      </div>
+    </div>
+    <div class="hero-cta" data-aos="fade-up" data-aos-delay="320" data-aos-duration="500">
+      <a href="pages/feed.html" class="btn btn-primary btn-lg magnetic-btn">
+        <i class="fa fa-compass"></i> Explore Prompts
+      </a>
+      <a href="pages/videos.html" class="btn btn-outline btn-lg">
+        <i class="fa fa-play"></i> AI Videos
+      </a>
+    </div>
+    <div class="hero-stats" data-aos="fade-up" data-aos-delay="400" data-aos-duration="500">
+      <div class="stat"><span class="stat-num" data-count="10000">0</span><span>+ Prompts</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" data-count="50000">0</span><span>+ Users</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num" data-count="20">0</span><span>+ AI Tools</span></div>
+    </div>
+  </div>
+  <div class="hero-visual" data-aos="fade-left" data-aos-delay="200" data-aos-duration="600">
+    <div class="floating-cards">
+      <div class="float-card fc1">
+        <div class="fc-tag">Midjourney</div>
+        <div class="fc-preview">🎨</div>
+        <div class="fc-title">Cinematic Portrait</div>
+      </div>
+      <div class="float-card fc2">
+        <div class="fc-tag">Kling AI</div>
+        <div class="fc-preview">🎬</div>
+        <div class="fc-title">Viral Video Prompt</div>
+      </div>
+      <div class="float-card fc3">
+        <div class="fc-tag">DALL·E 3</div>
+        <div class="fc-preview">✨</div>
+        <div class="fc-title">Neon Cityscape</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Scroll to explore</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- TRENDING PROMPTS -->
+<section class="section trending-section" id="trending">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up" data-aos-duration="500">
+      <div class="section-tag">🔥 Hot Right Now</div>
+      <h2 class="section-title">Trending Prompts</h2>
+      <p class="section-sub">The most copied and liked prompts this week</p>
+    </div>
+    <div class="prompt-grid" id="trendingGrid">
+      <div class="skeleton-card"></div><div class="skeleton-card"></div>
+      <div class="skeleton-card"></div><div class="skeleton-card"></div>
+      <div class="skeleton-card"></div><div class="skeleton-card"></div>
+    </div>
+    <div class="section-footer" data-aos="fade-up" data-aos-duration="400">
+      <a href="pages/feed.html" class="btn btn-outline">View All Prompts <i class="fa fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES (dynamic from Firestore) -->
+<section class="section categories-section" id="categories">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up" data-aos-duration="500">
+      <div class="section-tag">📁 Browse</div>
+      <h2 class="section-title">Explore Categories</h2>
+      <p class="section-sub">Find prompts by your favourite AI tools and styles</p>
+    </div>
+    <div class="categories-grid" id="homeCategoriesGrid" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
+      <!-- loaded dynamically -->
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+      <div class="skeleton-card" style="height:100px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST VIDEOS -->
+<section class="section" id="latestVideos" style="background:var(--bg-2)">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up" data-aos-duration="500">
+      <div class="section-tag">🎬 New</div>
+      <h2 class="section-title">Latest AI Videos</h2>
+      <p class="section-sub">AI-generated videos with copy-ready prompts</p>
+    </div>
+    <div class="video-grid" id="videoGrid">
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+      <div class="skeleton-card skeleton-video"></div>
+    </div>
+    <div class="section-footer">
+      <a href="pages/videos.html" class="btn btn-outline">All Videos <i class="fa fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background:var(--bg-2);overflow:hidden">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up" data-aos-duration="500">
+      <div class="section-tag">💬 Community</div>
+      <h2 class="section-title">What Creators Say</h2>
+      <p class="section-sub">Trusted by thousands of AI content creators worldwide</p>
+    </div>
+  </div>
+  <div class="testimonials-carousel-wrap" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
+    <div class="testimonials-track" id="testimonialsTrack">
+      <div class="testimonial-card-slide featured-t">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"PromptHub completely changed how I create AI content. The prompts are incredibly detailed and the results are stunning every time."</p>
+        <div class="testimonial-author"><div class="author-avatar">🎨</div><div><div class="author-name">Sarah K.</div><div class="author-role">AI Content Creator</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"I've tried every prompt platform out there. PromptHub is in a league of its own – the quality, UI and daily updates are unmatched."</p>
+        <div class="testimonial-author"><div class="author-avatar">🚀</div><div><div class="author-name">Marcus T.</div><div class="author-role">Digital Artist</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"The video prompts section is absolutely fire. My Kling AI videos have been going viral thanks to PromptHub. 10/10 recommend!"</p>
+        <div class="testimonial-author"><div class="author-avatar">🎬</div><div><div class="author-name">Priya R.</div><div class="author-role">Video Creator</div></div></div>
+      </div>
+      <div class="testimonial-card-slide featured-t">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"As a Midjourney power user, I was blown away by the quality of prompts here. Saved me hours of trial and error. Absolutely love it!"</p>
+        <div class="testimonial-author"><div class="author-avatar">🌟</div><div><div class="author-name">Alex M.</div><div class="author-role">Midjourney Expert</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"The one-click copy feature is genius. I go from idea to finished AI art in minutes. PromptHub is my daily driver for AI creation."</p>
+        <div class="testimonial-author"><div class="author-avatar">✨</div><div><div class="author-name">Jamie L.</div><div class="author-role">Freelance Designer</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"ChatGPT prompts here are elite level. My content output tripled after discovering PromptHub. Best resource for AI creators period."</p>
+        <div class="testimonial-author"><div class="author-avatar">💡</div><div><div class="author-name">Riya S.</div><div class="author-role">Content Strategist</div></div></div>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="testimonial-card-slide featured-t">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"PromptHub completely changed how I create AI content. The prompts are incredibly detailed and the results are stunning every time."</p>
+        <div class="testimonial-author"><div class="author-avatar">🎨</div><div><div class="author-name">Sarah K.</div><div class="author-role">AI Content Creator</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"I've tried every prompt platform out there. PromptHub is in a league of its own – the quality, UI and daily updates are unmatched."</p>
+        <div class="testimonial-author"><div class="author-avatar">🚀</div><div><div class="author-name">Marcus T.</div><div class="author-role">Digital Artist</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"The video prompts section is absolutely fire. My Kling AI videos have been going viral thanks to PromptHub. 10/10 recommend!"</p>
+        <div class="testimonial-author"><div class="author-avatar">🎬</div><div><div class="author-name">Priya R.</div><div class="author-role">Video Creator</div></div></div>
+      </div>
+      <div class="testimonial-card-slide featured-t">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"As a Midjourney power user, I was blown away by the quality of prompts here. Saved me hours of trial and error. Absolutely love it!"</p>
+        <div class="testimonial-author"><div class="author-avatar">🌟</div><div><div class="author-name">Alex M.</div><div class="author-role">Midjourney Expert</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"The one-click copy feature is genius. I go from idea to finished AI art in minutes. PromptHub is my daily driver for AI creation."</p>
+        <div class="testimonial-author"><div class="author-avatar">✨</div><div><div class="author-name">Jamie L.</div><div class="author-role">Freelance Designer</div></div></div>
+      </div>
+      <div class="testimonial-card-slide">
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"ChatGPT prompts here are elite level. My content output tripled after discovering PromptHub. Best resource for AI creators period."</p>
+        <div class="testimonial-author"><div class="author-avatar">💡</div><div><div class="author-name">Riya S.</div><div class="author-role">Content Strategist</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo" style="margin-bottom:12px;display:inline-flex">
+          <img src="logo.png" alt="PromptHub" class="logo-img" onerror="this.style.display='none'" style="height:36px"/>
+        </a>
+        <p>The premium destination for AI prompt creators worldwide.</p>
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" class="social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <a href="pages/feed.html">All Prompts</a>
+        <a href="pages/categories.html">Categories</a>
+        <a href="pages/videos.html">AI Videos</a>
+        <a href="pages/search.html">Search</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="pages/about.html">About Us</a>
+        <a href="pages/contact.html">Contact</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+      <div class="footer-links">
+        <h4>AI Tools</h4>
+        <a href="pages/feed.html?category=midjourney">Midjourney</a>
+        <a href="pages/feed.html?category=kling-ai">Kling AI</a>
+        <a href="pages/feed.html?category=chatgpt">ChatGPT</a>
+        <a href="pages/feed.html?category=runway-ai">Runway ML</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 PromptHub. All rights reserved. &nbsp;|&nbsp; Developed by <strong>Alvortix Tech Services</strong></p>
+    </div>
+  </div>
+</footer>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav">
+  <a href="index.html" class="mobile-nav-item active"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="pages/feed.html" class="mobile-nav-item"><i class="fa fa-compass"></i><span>Explore</span></a>
+  <a href="pages/search.html" class="mobile-nav-item"><i class="fa fa-search"></i><span>Search</span></a>
+  <a href="pages/videos.html" class="mobile-nav-item"><i class="fa fa-play-circle"></i><span>Videos</span></a>
+  <a href="pages/contact.html" class="mobile-nav-item"><i class="fa fa-envelope"></i><span>Contact</span></a>
+</nav>
+
+<div id="toast" class="toast"></div>
+<button class="fab" onclick="window.location.href='pages/feed.html'" title="Explore"><i class="fa fa-compass"></i></button>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
+<script>
+// AOS with faster timings (Task #4)
+AOS.init({duration:500,easing:'ease-out-cubic',once:true,offset:40,disable:window.innerWidth<480});
+initNavbarScroll(); initHamburger(); initThemeToggle(); initMagneticButtons();
+initTypedText(); initCounters(); initScrollReveal();
+
+document.getElementById('heroSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter')handleHeroSearch();});
+
+// LOAD TRENDING PROMPTS
+async function loadTrending() {
+  const grid = document.getElementById('trendingGrid');
+  try {
+    const prompts = await DB.getTrending(6);
+    if (!prompts.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📝</div><h3>Prompts coming soon</h3><p>Admin is adding prompts. Check back shortly!</p></div>'; return; }
+    grid.innerHTML = prompts.map((p,i)=>buildPromptCard(p,i)).join('');
+  } catch(e) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">⚡</div><h3>Loading prompts...</h3><p>Connect to internet and refresh.</p></div>'; }
+}
+
+// LOAD CATEGORIES (Dynamic from Firestore, Task #1)
+async function loadHomeCategories() {
+  const grid = document.getElementById('homeCategoriesGrid');
+  try {
+    const cats = await loadDynamicCategories();
+    const display = cats.slice(0,8);
+    grid.innerHTML = display.map(c=>{
+      const icon = c.icon||getCatEmoji(c.slug||c.id);
+      const grad = c.gradient||'#7C3AED,#00E5FF';
+      const slug = c.slug||c.id;
+      return `
+  <div class="cat-card" onclick="gotoCategory('${slug}')">
+
+    ${
+      c.thumbnail
+      ?
+      `<img src="${c.thumbnail}" class="cat-thumb" alt="${sanitize(c.name)}">`
+      :
+      `<div class="cat-icon" style="background:linear-gradient(135deg,${grad})">${icon}</div>`
+    }
+
+    <div class="cat-name">${sanitize(c.name)}</div>
+    <div class="cat-count" data-category="${slug}">Explore</div>
+
+  </div>`;
+    }).join('');
+    // Load counts async
+    display.forEach(async c=>{
+      const slug = c.slug||c.id;
+      try{const n=await DB.getCategoryCount(slug);const el=document.querySelector(`[data-category="${slug}"]`);if(el)el.textContent=n>0?`${formatNumber(n)} prompts`:'Explore';}catch{}
+    });
+  } catch(e) { grid.innerHTML=''; }
+}
+
+// LOAD VIDEOS
+async function loadVideos() {
+  const grid = document.getElementById('videoGrid');
+  try {
+    const videos = await DB.getPrompts({type:'video',limit:3,orderBy:'createdAt'});
+    if (!videos.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🎬</div><h3>Videos coming soon</h3></div>'; return; }
+    grid.innerHTML = videos.map((v,i)=>`
+      <div class="video-card" onclick="viewPrompt('${v.id}')" style="animation-delay:${i*0.08}s">
+        <div class="video-thumb">
+          ${v.thumbnailUrl||v.imageUrl?`<img src="${v.thumbnailUrl||v.imageUrl}" alt="${sanitize(v.title||'')}" loading="lazy"/>`:`<div style="height:100%;background:linear-gradient(135deg,var(--bg-2),var(--bg-3));display:flex;align-items:center;justify-content:center;font-size:3rem">🎬</div>`}
+          <div class="video-play"><div class="video-play-icon"><i class="fa fa-play"></i></div></div>
+          <div class="video-duration">${v.duration||'AI Video'}</div>
+        </div>
+        <div class="card-body">
+          <div class="card-tool-tag">${getToolEmoji(v.tool)} ${sanitize(v.tool||'AI')}</div>
+          <div class="card-title">${sanitize(v.title||'Video Prompt')}</div>
+          <div class="card-meta" style="margin-top:8px"><span><i class="fa fa-eye"></i> ${formatNumber(v.views||0)}</span><span>·</span><span>${formatDate(v.createdAt)}</span></div>
+        </div>
+      </div>`).join('');
+  } catch(e) { grid.innerHTML=''; }
+}
+
+loadTrending(); loadHomeCategories(); loadVideos();
+</script>
+</body>
+</html>
