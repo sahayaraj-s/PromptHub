@@ -300,3 +300,76 @@ async function populateCategorySelect(selectEl, selectedVal='') {
   const opts = cats.map(c=>`<option value="${c.slug||c.id}" ${(c.slug||c.id)===selectedVal?'selected':''}>${c.icon||getCatEmoji(c.slug||c.id)} ${sanitize(c.name)}</option>`).join('');
   selectEl.innerHTML = `<option value="">Select Category</option>${opts}`;
 }
+
+// ================================================
+// AD BLOCKER DETECTION (auto-runs on user pages)
+// ================================================
+(function detectAdBlock(){
+  // Skip on admin pages
+  if(window.location.pathname.includes('/admin')) return;
+
+  // Inject a bait element that ad blockers target
+  const bait = document.createElement('div');
+  bait.className = 'ad adsbygoogle ad-block text-ad textAd text_ad text_ads ad-300x250 pub_300x250 pub_728x90';
+  bait.setAttribute('data-ad','true');
+  bait.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;';
+  document.body.appendChild(bait);
+
+  // Also try fetching a known ad URL that ad blockers intercept
+  let adFetchBlocked = false;
+  const img = new Image();
+  img.onload  = () => {}; // not blocked
+  img.onerror = () => { adFetchBlocked = true; };
+  img.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-test';
+
+  setTimeout(() => {
+    const style = window.getComputedStyle(bait);
+    const isHidden =
+      !bait ||
+      bait.offsetParent === null ||
+      bait.offsetHeight === 0 ||
+      bait.offsetWidth  === 0 ||
+      style.getPropertyValue('display')    === 'none' ||
+      style.getPropertyValue('visibility') === 'hidden' ||
+      style.getPropertyValue('opacity')    === '0';
+
+    if(bait.parentNode) bait.parentNode.removeChild(bait);
+
+    if(isHidden || adFetchBlocked){
+      _showAdBlockOverlay();
+    }
+  }, 400);
+
+  function _showAdBlockOverlay(){
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+
+    const overlay = document.createElement('div');
+    overlay.id = 'adblock-overlay';
+    overlay.innerHTML = `
+      <div class="adblock-modal">
+        <span class="adblock-icon">🛡️</span>
+        <h2>Ad Blocker Detected</h2>
+        <p>PromptHub is 100% free and kept alive by non-intrusive ads. Please whitelist us to continue using the site — it takes only 10 seconds!</p>
+        <div class="adblock-steps">
+          <div class="adblock-step">
+            <div class="adblock-step-num">1</div>
+            <span>Click your ad blocker icon in the browser toolbar</span>
+          </div>
+          <div class="adblock-step">
+            <div class="adblock-step-num">2</div>
+            <span>Select <strong style="color:#fff">"Pause on this site"</strong> or <strong style="color:#fff">"Whitelist"</strong></span>
+          </div>
+          <div class="adblock-step">
+            <div class="adblock-step-num">3</div>
+            <span>Click the button below to reload</span>
+          </div>
+        </div>
+        <button class="adblock-btn" onclick="location.reload()">
+          <i class="fa fa-refresh"></i>
+          I've Disabled It – Reload Now
+        </button>
+      </div>`;
+    document.body.appendChild(overlay);
+  }
+})();

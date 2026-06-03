@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <link rel="stylesheet" href="../css/main.css"/>
   <link rel="stylesheet" href="../css/animations.css"/>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870973257436294"
+     crossorigin="anonymous"></script>
   <style>
     .back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--text-muted);font-size:0.875rem;margin-bottom:28px;transition:var(--transition);padding:8px 0;}
     .back-btn:hover{color:var(--text);}
@@ -185,19 +187,8 @@ function renderPrompt() {
         <!-- DESC -->
         ${p.description?`<p style="color:var(--text-muted);line-height:1.7;font-size:0.95rem">${sanitize(p.description)}</p>`:''}
 
-        <!-- PROMPT BOX -->
-        <div class="prompt-box">
-          <div class="prompt-box-header">
-            <span class="prompt-box-label">📝 Prompt</span>
-            <button class="card-copy-btn" id="mainCopyBtn" onclick="handleCopy('${promptId}',promptData.prompt||'',this)">
-              <i class="fa fa-copy"></i> Copy Prompt
-            </button>
-          </div>
-          <div class="prompt-text-area">${sanitize(p.prompt||'No prompt available')}</div>
-        </div>
-
-        <!-- SHARE -->
-        <div>
+        <!-- SHARE (Section 1 of 5) -->
+        <div class="prompt-section" data-section="share">
           <div class="section-label">Share</div>
           <div class="share-buttons">
             <button class="share-btn whatsapp" onclick="shareToWhatsApp('${sanitize(p.title||'')}','${window.location.href}')">
@@ -209,21 +200,44 @@ function renderPrompt() {
           </div>
         </div>
 
-        <!-- AI TOOL BUTTONS (with autofill, Task #5) -->
-        <div>
+        <!-- AI TOOL BUTTONS (Section 2 of 5) -->
+        <div class="prompt-section" data-section="tools">
           <div class="section-label">Try With AI Tools</div>
           <div class="ai-tools-grid" id="toolBtns"></div>
         </div>
 
-        <!-- TAGS -->
+        <!-- TAGS (Section 3 of 5) -->
         ${p.tags?.length?`
-          <div>
+          <div class="prompt-section" data-section="tags">
             <div class="section-label">Tags</div>
             <div class="tags-list">
               ${p.tags.map(t=>`<span class="tag" onclick="window.location.href='search.html?q=${encodeURIComponent(t)}'">#${sanitize(t)}</span>`).join('')}
             </div>
-          </div>`:''
+          </div>`:'<div class="prompt-section" data-section="tags"></div>'
         }
+
+        <!-- PROMPT BOX (unlocked after 5 sections viewed) -->
+        <div class="prompt-lock-wrap" id="promptLockWrap">
+          <!-- Lock overlay -->
+          <div class="prompt-lock-overlay" id="promptLockOverlay">
+            <div class="prompt-unlock-info">
+              <div class="unlock-lock-icon">🔒</div>
+              <div class="unlock-label">SCROLL TO UNLOCK PROMPT</div>
+              <div class="unlock-progress-bar"><div class="unlock-progress-fill" id="unlockFill"></div></div>
+              <div class="unlock-count" id="unlockCount">0 / 5 sections viewed</div>
+            </div>
+          </div>
+          <!-- Actual prompt box (blurred until unlocked) -->
+          <div class="prompt-box">
+            <div class="prompt-box-header">
+              <span class="prompt-box-label">📝 Prompt</span>
+              <button class="card-copy-btn prompt-blur-text" id="mainCopyBtn" onclick="handleCopy('${promptId}',promptData.prompt||'',this)" disabled>
+                <i class="fa fa-lock"></i> Locked
+              </button>
+            </div>
+            <div class="prompt-text-area prompt-blur-text" id="promptTextArea">${sanitize(p.prompt||'No prompt available')}</div>
+          </div>
+        </div>
 
         <!-- DONATE SECTION – QR + Pay Now (Task #6) -->
         <div class="donate-section">
@@ -275,6 +289,85 @@ function renderPrompt() {
   buildToolButtons(p.tool, p.prompt||'');
   loadRelated();
   loadComments();
+  initPromptUnlock(); // 5-section scroll gate
+}
+
+// ── 5-SECTION SCROLL UNLOCK ──
+function initPromptUnlock(){
+  const REQUIRED = 5;
+  let seen = 0;
+  let unlocked = false;
+
+  // Sections to track: badges, title+meta, description, share, tools, tags, related, comments
+  const sectionSelectors = [
+    '.detail-grid > div:first-child .media-full',  // media (section 1)
+    '.detail-meta',                                  // meta info (section 2)
+    '[data-section="share"]',                        // share (section 3)
+    '[data-section="tools"]',                        // ai tools (section 4)
+    '#relatedGrid',                                  // related prompts (section 5)
+  ];
+
+  const overlay = document.getElementById('promptLockOverlay');
+  const fill    = document.getElementById('unlockFill');
+  const count   = document.getElementById('unlockCount');
+  if(!overlay) return;
+
+  function updateProgress(){
+    const pct = Math.min((seen / REQUIRED) * 100, 100);
+    if(fill) fill.style.width = pct + '%';
+    if(count) count.textContent = `${Math.min(seen, REQUIRED)} / ${REQUIRED} sections viewed`;
+  }
+
+  function doUnlock(){
+    if(unlocked) return;
+    unlocked = true;
+    // Fade out overlay
+    if(overlay){ overlay.classList.add('unlocked'); }
+    // Unblur text
+    document.querySelectorAll('.prompt-blur-text').forEach(el=>el.classList.add('unblurred'));
+    // Enable copy button
+    const btn = document.getElementById('mainCopyBtn');
+    if(btn){
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa fa-copy"></i> Copy Prompt';
+    }
+    // Remove overlay from DOM after animation
+    setTimeout(()=>{ if(overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 600);
+  }
+
+  updateProgress();
+
+  // IntersectionObserver — fires when each section enters viewport
+  const io = new IntersectionObserver((entries)=>{
+    if(unlocked) return;
+    entries.forEach(entry=>{
+      if(entry.isIntersecting && !entry.target._counted){
+        entry.target._counted = true;
+        seen++;
+        updateProgress();
+        if(seen >= REQUIRED) doUnlock();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  // Observe sections (wait for DOM to settle)
+  setTimeout(()=>{
+    sectionSelectors.forEach(sel=>{
+      const el = document.querySelector(sel);
+      if(el) io.observe(el);
+    });
+    // If page is already scrolled / sections already visible, count them immediately
+    sectionSelectors.forEach(sel=>{
+      const el = document.querySelector(sel);
+      if(!el) return;
+      const rect = el.getBoundingClientRect();
+      if(rect.top < window.innerHeight * 0.85 && !el._counted){
+        el._counted = true; seen++;
+      }
+    });
+    updateProgress();
+    if(seen >= REQUIRED) doUnlock();
+  }, 300);
 }
 
 // AI TOOL BUTTONS with autofill (Task #5)

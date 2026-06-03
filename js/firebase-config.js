@@ -50,6 +50,7 @@ const Cloudinary = {
   }
 };
 
+
 // ================================================
 // DB HELPERS (with Category support)
 // ================================================
@@ -146,8 +147,11 @@ const DB = {
   async markContactRead(id) { await db.collection('contacts').doc(id).update({read:true}); },
   async deleteContact(id) { await db.collection('contacts').doc(id).delete(); },
 
+ 
+
+
   // ── CATEGORIES (Firestore-backed) ──
-  async getCategories(activeOnly=true) {
+     async getCategories(activeOnly=true) {
     let q = db.collection('categories').orderBy('sortOrder','asc');
     if(activeOnly) q = db.collection('categories').where('status','==','active').orderBy('sortOrder','asc');
     try {
@@ -177,6 +181,39 @@ const DB = {
   async updateCategory(id,data) {
     await db.collection('categories').doc(id).update({...data,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
   },
-  async deleteCategory(id) { await db.collection('categories').doc(id).delete(); }
+  async deleteCategory(id) { await db.collection('categories').doc(id).delete(); },
+
+  // ── BANNERS ──
+  async getBanners(activeOnly=false) {
+    let q = db.collection('banners').orderBy('sort','asc');
+    try {
+      const s = await q.get();
+      let banners = s.docs.map(d=>({id:d.id,...d.data()}));
+      if(activeOnly) banners = banners.filter(b=>b.active!==false);
+      return banners;
+    } catch(e) {
+      // Fallback without orderBy if index not ready
+      const s = await db.collection('banners').get();
+      let banners = s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.sort||0)-(b.sort||0));
+      if(activeOnly) banners = banners.filter(b=>b.active!==false);
+      return banners;
+    }
+  },
+  async createBanner(data) {
+    return await db.collection('banners').add({
+      ...data,
+      active: data.active!==undefined ? data.active : true,
+      sort: data.sort||0,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  },
+  async updateBanner(id, data) {
+    await db.collection('banners').doc(id).update({
+      ...data,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+  },
+  async deleteBanner(id) { await db.collection('banners').doc(id).delete(); }
 };
 console.log('🔥 Firebase initialized – PromptHub');

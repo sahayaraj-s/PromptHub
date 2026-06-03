@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
   <link rel="stylesheet" href="css/main.css"/>
   <link rel="stylesheet" href="css/animations.css"/>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2870973257436294"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -42,61 +44,20 @@
   </div>
 </nav>
 
-<!-- HERO — Fixed mobile 16:9 responsive layout -->
-<section class="hero" id="hero">
-  <div class="hero-bg">
-    <div class="hero-orb orb1"></div>
-    <div class="hero-orb orb2"></div>
-    <div class="hero-orb orb3"></div>
-    <div class="grid-overlay"></div>
-  </div>
-  <div class="hero-content">
-    <div class="hero-badge" data-aos="fade-down" data-aos-duration="500">
-      <span class="badge-dot"></span>
-      <span>🔥 Trending AI Prompts Updated Daily</span>
-    </div>
-    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
-      Unlock the Power of<br/>
-      <span class="gradient-text" >AI Creativity</span>
-    </h1>
-    <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="160" data-aos-duration="500">
-      Discover, copy & share premium prompts for Midjourney, DALL·E, Kling AI, Sora and 20+ tools.
-    </p>
-    <div class="hero-search" data-aos="fade-up" data-aos-delay="240" data-aos-duration="500">
-      <div class="search-wrapper">
-        <i class="fa fa-search search-icon"></i>
-        <input type="text" id="heroSearch" placeholder="Search prompts, tools, styles..." class="search-input"/>
-        <button class="search-btn" onclick="handleHeroSearch()">Search</button>
-      </div>
-      <div class="search-suggestions">
-        <span onclick="quickSearch('cinematic portrait')">cinematic portrait</span>
-        <span onclick="quickSearch('anime style')">anime style</span>
-        <span onclick="quickSearch('neon city')">neon city</span>
-        <span onclick="quickSearch('viral video')">viral video</span>
-      </div>
-    </div>
-    <div class="hero-cta" data-aos="fade-up" data-aos-delay="320" data-aos-duration="500">
-      <a href="pages/feed.html" class="btn btn-primary btn-lg magnetic-btn">
-        <i class="fa fa-compass"></i> Explore Prompts
-      </a>
-      <a href="pages/videos.html" class="btn btn-outline btn-lg">
-        <i class="fa fa-play"></i> AI Videos
-      </a>
-    </div>
-    <div class="hero-stats" data-aos="fade-up" data-aos-delay="400" data-aos-duration="500">
-      <div class="stat"><span class="stat-num" data-count="10000">0</span><span>+ Prompts</span></div>
-      <div class="stat-divider"></div>
-      <div class="stat"><span class="stat-num" data-count="50000">0</span><span>+ Users</span></div>
-      <div class="stat-divider"></div>
-      <div class="stat"><span class="stat-num" data-count="20">0</span><span>+ AI Tools</span></div>
+
+
+<!-- HERO SLIDER -->
+<div class="hero-slider" id="heroSlider">
+  <div class="hero-slide hero-slide-default active">
+    <div class="hero-default-content">
+      <div class="hero-default-logo">⚡</div>
+      <div class="hero-default-text">Loading Banners…</div>
     </div>
   </div>
-  
-  <div class="hero-scroll-hint">
-    <span>Scroll to explore</span>
-    <div class="scroll-arrow"></div>
-  </div>
-</section>
+  <button class="hero-arrow prev" id="heroPrev">&#8249;</button>
+  <button class="hero-arrow next" id="heroNext">&#8250;</button>
+  <div class="hero-dots" id="heroDots"></div>
+</div>
 
 <!-- TRENDING PROMPTS -->
 <section class="section trending-section" id="trending">
@@ -166,71 +127,60 @@
       <h2 class="section-title">What Creators Say</h2>
       <p class="section-sub">Trusted by thousands of AI content creators worldwide</p>
     </div>
-  </div>
-  <div class="testimonials-carousel-wrap" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
-    <div class="testimonials-track" id="testimonialsTrack">
-      <div class="testimonial-card-slide featured-t">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"PromptHub completely changed how I create AI content. The prompts are incredibly detailed and the results are stunning every time."</p>
-        <div class="testimonial-author"><div class="author-avatar">🎨</div><div><div class="author-name">Sarah K.</div><div class="author-role">AI Content Creator</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"I've tried every prompt platform out there. PromptHub is in a league of its own – the quality, UI and daily updates are unmatched."</p>
-        <div class="testimonial-author"><div class="author-avatar">🚀</div><div><div class="author-name">Marcus T.</div><div class="author-role">Digital Artist</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"The video prompts section is absolutely fire. My Kling AI videos have been going viral thanks to PromptHub. 10/10 recommend!"</p>
-        <div class="testimonial-author"><div class="author-avatar">🎬</div><div><div class="author-name">Priya R.</div><div class="author-role">Video Creator</div></div></div>
-      </div>
-      <div class="testimonial-card-slide featured-t">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"As a Midjourney power user, I was blown away by the quality of prompts here. Saved me hours of trial and error. Absolutely love it!"</p>
-        <div class="testimonial-author"><div class="author-avatar">🌟</div><div><div class="author-name">Alex M.</div><div class="author-role">Midjourney Expert</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"The one-click copy feature is genius. I go from idea to finished AI art in minutes. PromptHub is my daily driver for AI creation."</p>
-        <div class="testimonial-author"><div class="author-avatar">✨</div><div><div class="author-name">Jamie L.</div><div class="author-role">Freelance Designer</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"ChatGPT prompts here are elite level. My content output tripled after discovering PromptHub. Best resource for AI creators period."</p>
-        <div class="testimonial-author"><div class="author-avatar">💡</div><div><div class="author-name">Riya S.</div><div class="author-role">Content Strategist</div></div></div>
-      </div>
-      <!-- Duplicate for seamless loop -->
-      <div class="testimonial-card-slide featured-t">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"PromptHub completely changed how I create AI content. The prompts are incredibly detailed and the results are stunning every time."</p>
-        <div class="testimonial-author"><div class="author-avatar">🎨</div><div><div class="author-name">Sarah K.</div><div class="author-role">AI Content Creator</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"I've tried every prompt platform out there. PromptHub is in a league of its own – the quality, UI and daily updates are unmatched."</p>
-        <div class="testimonial-author"><div class="author-avatar">🚀</div><div><div class="author-name">Marcus T.</div><div class="author-role">Digital Artist</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"The video prompts section is absolutely fire. My Kling AI videos have been going viral thanks to PromptHub. 10/10 recommend!"</p>
-        <div class="testimonial-author"><div class="author-avatar">🎬</div><div><div class="author-name">Priya R.</div><div class="author-role">Video Creator</div></div></div>
-      </div>
-      <div class="testimonial-card-slide featured-t">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"As a Midjourney power user, I was blown away by the quality of prompts here. Saved me hours of trial and error. Absolutely love it!"</p>
-        <div class="testimonial-author"><div class="author-avatar">🌟</div><div><div class="author-name">Alex M.</div><div class="author-role">Midjourney Expert</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"The one-click copy feature is genius. I go from idea to finished AI art in minutes. PromptHub is my daily driver for AI creation."</p>
-        <div class="testimonial-author"><div class="author-avatar">✨</div><div><div class="author-name">Jamie L.</div><div class="author-role">Freelance Designer</div></div></div>
-      </div>
-      <div class="testimonial-card-slide">
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"ChatGPT prompts here are elite level. My content output tripled after discovering PromptHub. Best resource for AI creators period."</p>
-        <div class="testimonial-author"><div class="author-avatar">💡</div><div><div class="author-name">Riya S.</div><div class="author-role">Content Strategist</div></div></div>
+    <div class="testimonials-section-wrap" data-aos="fade-up" data-aos-delay="80" data-aos-duration="500">
+      <div class="testimonials-track" id="testimonialsTrack">
+        <div class="testimonial-card-slide featured-t">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"PromptHub completely changed how I create AI content. The prompts are incredibly detailed and the results are stunning every time."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🎨</div>
+            <div><div class="author-name">Sarah K.</div><div class="author-role">AI Content Creator</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card-slide">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"I've tried every prompt platform out there. PromptHub is in a league of its own – the quality, UI and daily updates are unmatched."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🚀</div>
+            <div><div class="author-name">Marcus T.</div><div class="author-role">Digital Artist</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card-slide">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"The video prompts section is absolutely fire. My Kling AI videos have been going viral thanks to PromptHub. 10/10 recommend!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🎬</div>
+            <div><div class="author-name">Priya R.</div><div class="author-role">Video Creator</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card-slide featured-t">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"As a Midjourney power user, I was blown away by the quality of prompts here. Saved me hours of trial and error. Absolutely love it!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🌟</div>
+            <div><div class="author-name">Alex M.</div><div class="author-role">Midjourney Expert</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card-slide">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"The one-click copy feature is genius. I go from idea to finished AI art in minutes. PromptHub is my daily driver for AI creation."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">✨</div>
+            <div><div class="author-name">Jamie L.</div><div class="author-role">Freelance Designer</div></div>
+          </div>
+        </div>
+        <div class="testimonial-card-slide">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"ChatGPT prompts here are elite level. My content output tripled after discovering PromptHub. Best resource for AI creators period."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">💡</div>
+            <div><div class="author-name">Riya S.</div><div class="author-role">Content Strategist</div></div>
+          </div>
+        </div>
       </div>
     </div>
+    <!-- Dot indicators -->
+    <div class="t-slider-dots" id="tSliderDots"></div>
   </div>
 </section>
 
@@ -295,13 +245,129 @@
 <script src="js/firebase-config.js"></script>
 <script src="js/utils.js"></script>
 <script>
-// AOS with faster timings (Task #4)
+// Init
 AOS.init({duration:500,easing:'ease-out-cubic',once:true,offset:40,disable:window.innerWidth<480});
 initNavbarScroll(); initHamburger(); initThemeToggle(); initMagneticButtons();
 initTypedText(); initCounters(); initScrollReveal();
 
-document.getElementById('heroSearch')?.addEventListener('keydown',e=>{if(e.key==='Enter')handleHeroSearch();});
+// ── HERO SLIDER (SP GlowPetals style) ──
+(function initHeroSlider(){
+  let currentSlide = 0, slideTimer = null;
+  const slider = document.getElementById('heroSlider');
+  const dotsEl = document.getElementById('heroDots');
 
+  function getSlides(){ return slider ? slider.querySelectorAll('.hero-slide') : []; }
+
+  function buildDots(slides){
+    if(!dotsEl) return;
+    dotsEl.innerHTML = '';
+    slides.forEach((_,i)=>{
+      const d = document.createElement('button');
+      d.className = 'hero-dot' + (i===0?' active':'');
+      d.setAttribute('aria-label','Slide '+(i+1));
+      d.onclick = ()=>{ clearInterval(slideTimer); goTo(i); startAuto(); };
+      dotsEl.appendChild(d);
+    });
+  }
+
+  function goTo(n){
+    const slides = getSlides();
+    if(!slides.length) return;
+    slides[currentSlide].classList.remove('active');
+    dotsEl.children[currentSlide]?.classList.remove('active');
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].classList.add('active');
+    dotsEl.children[currentSlide]?.classList.add('active');
+  }
+
+  function startAuto(){
+    clearInterval(slideTimer);
+    slideTimer = setInterval(()=>goTo(currentSlide+1), 5000);
+  }
+
+  document.getElementById('heroPrev')?.addEventListener('click',()=>{ clearInterval(slideTimer); goTo(currentSlide-1); startAuto(); });
+  document.getElementById('heroNext')?.addEventListener('click',()=>{ clearInterval(slideTimer); goTo(currentSlide+1); startAuto(); });
+
+  async function loadHeroBanners(){
+    try {
+      const banners = (await DB.getBanners(true)).filter(b=>b.active!==false).sort((a,b)=>(a.sort||0)-(b.sort||0));
+      if(!banners.length) return; // keep default slide
+      slider.innerHTML = banners.map((b,i)=>`
+        <div class="hero-slide ${i===0?'active':''}" style="background-image:url('${b.imageUrl}');background-size:cover;background-position:center;">
+          <div class="hero-slide-overlay"></div>
+          <div class="hero-cta-wrap">
+            <a href="${b.link||'pages/feed.html'}" class="hero-cta-btn">
+              <span>${b.btnText||'Explore Prompts ⚡'}</span>
+            </a>
+          </div>
+        </div>`).join('')
+        + `<button class="hero-arrow prev" id="heroPrev">&#8249;</button>`
+        + `<button class="hero-arrow next" id="heroNext">&#8250;</button>`
+        + `<div class="hero-dots" id="heroDots"></div>`;
+
+      currentSlide = 0;
+      buildDots(getSlides());
+      startAuto();
+      // Re-bind arrow clicks after DOM rebuild
+      document.getElementById('heroPrev')?.addEventListener('click',()=>{ clearInterval(slideTimer); goTo(currentSlide-1); startAuto(); });
+      document.getElementById('heroNext')?.addEventListener('click',()=>{ clearInterval(slideTimer); goTo(currentSlide+1); startAuto(); });
+    } catch(e){ console.warn('Hero banners:', e); }
+  }
+
+  buildDots(getSlides());
+  startAuto();
+  loadHeroBanners();
+})();
+
+// ── TESTIMONIALS JS-STEP SLIDER (SP GlowPetals style) ──
+(function initTestimonialsSlider(){
+  const track = document.getElementById('testimonialsTrack');
+  const dotsEl = document.getElementById('tSliderDots');
+  if(!track) return;
+
+  const cards = track.querySelectorAll('.testimonial-card-slide');
+  const total = cards.length;
+  let idx = 0, timer = null;
+
+  function getVisible(){
+    return window.innerWidth < 640 ? 1 : window.innerWidth < 1024 ? 2 : 3;
+  }
+
+  function cardW(){
+    return cards[0] ? cards[0].offsetWidth + 14 : 0;
+  }
+
+  function maxIdx(){
+    return Math.max(0, total - getVisible());
+  }
+
+  function buildDots(){
+    if(!dotsEl) return;
+    dotsEl.innerHTML = '';
+    const steps = maxIdx() + 1;
+    for(let i=0;i<steps;i++){
+      const d = document.createElement('button');
+      d.className = 't-dot' + (i===0?' active':'');
+      d.onclick = ()=>{ clearInterval(timer); goToT(i); startT(); };
+      dotsEl.appendChild(d);
+    }
+  }
+
+  function goToT(n){
+    idx = Math.min(Math.max(n,0), maxIdx());
+    track.style.transform = `translateX(-${idx * cardW()}px)`;
+    dotsEl?.querySelectorAll('.t-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  }
+
+  function startT(){
+    clearInterval(timer);
+    timer = setInterval(()=>goToT(idx >= maxIdx() ? 0 : idx + 1), 4000);
+  }
+
+  window.addEventListener('resize', ()=>{ buildDots(); goToT(0); });
+  buildDots();
+  startT();
+})();
 // LOAD TRENDING PROMPTS
 async function loadTrending() {
   const grid = document.getElementById('trendingGrid');
