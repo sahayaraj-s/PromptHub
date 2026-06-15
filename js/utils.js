@@ -300,7 +300,7 @@ async function populateCategorySelect(selectEl, selectedVal='') {
   const opts = cats.map(c=>`<option value="${c.slug||c.id}" ${(c.slug||c.id)===selectedVal?'selected':''}>${c.icon||getCatEmoji(c.slug||c.id)} ${sanitize(c.name)}</option>`).join('');
   selectEl.innerHTML = `<option value="">Select Category</option>${opts}`;
 }
-
+/*
 // ================================================
 // AD BLOCKER DETECTION (auto-runs on user pages)
 // ================================================
@@ -373,3 +373,4 @@ async function populateCategorySelect(selectEl, selectedVal='') {
     document.body.appendChild(overlay);
   }
 })();
+*/
